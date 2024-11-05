@@ -1,0 +1,101 @@
+.pin-container {
+    max-width: 360px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  h2 {
+    color: #333;
+    margin-bottom: 2rem;
+    font-size: 1.25rem;
+  }
+  
+  .pin-display {
+    margin-bottom: 2rem;
+  }
+  
+  .pin-dots {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  .pin-dot {
+    width: 2rem;
+    height: 2rem;
+    border-bottom: 2px solid #0082FF;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+  }
+  
+  .error-message {
+    color: #ef4444;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .number-pad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .number-button {
+    aspect-ratio: 1;
+    border: none;
+    background-color: #f3f4f6;
+    border-radius: 9999px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .number-button:hover {
+    background-color: #e5e7eb;
+  }
+  
+  .number-button.empty {
+    visibility: hidden;
+  }
+  
+  .number-button.delete {
+    font-size: 1.75rem;
+    background-color: #e5e7eb;
+  }
+  
+  .login-button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #8b5cf6;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    transition: background-color 0.2s;
+  }
+  
+  .login-button:hover:not(:disabled) {
+    background-color: #171530;
+  }
+  
+  .login-button:disabled {
+    background-color: #0082FF;
+    cursor: not-allowed;
+  }
+  
+  .reset-link {
+    color: #171530;
+    text-decoration: none;
+    font-size: 0.875rem;
+    cursor: pointer;
+  }
+  
+  .reset-link:hover {
+    text-decoration: underline;
+  }

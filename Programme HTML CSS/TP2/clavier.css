@@ -1,0 +1,158 @@
+*{
+  padding: 0; 
+  margin: 0; 
+}
+button{
+    height: 5vh;
+    width: 5vw;
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+} 
+.clavier{
+    position: relative;
+    background-color: grey;
+    padding: 20%;
+    margin: 5%;
+    height: 20vh;
+}
+ .ligne{
+    position: relative;
+    display: flex;
+    height: 4.4vh;
+    border: 0px solid gray;
+    bottom: 100px;
+    width: 120%;
+} 
+.esc{
+background-color: black;
+width: 4vw;
+color: white;
+text-align:center ;
+border-radius: 5px;
+border: 1px solid white;
+}
+.grand{
+    position: relative;
+    left: 3px;
+    width: 74%;
+    background-color: black;
+    border-radius: 5px;
+    border: 1px solid white;
+}
+.lang{
+    position: relative;
+    left: 6px;
+    width: 5vw;
+    color: white;
+    background-color: black;
+    border-radius: 5px;
+    border: 1px solid white;
+}
+.paren{
+    position: relative;
+    left: 9px;
+    width: 5vw;
+    color: white;
+    background-color: black;
+    border-radius: 5px;
+    border: 1px solid white;
+}
+span{
+    height: 4vh ;
+    width: 7vw;
+    background-color: rgb(174, 6, 6);
+    color: white;
+    border-radius: 5px;
+    border: 1px solid white;
+    position: relative;
+    top: 6%;
+    text-align: center;
+}
+.caps{
+    height: 4vh ;
+    width: 8vw;
+    background-color: rgb(174, 6, 6);
+    color: white;
+    border-radius: 5px;
+    border: 1px solid white;
+    text-align: center;
+}
+.shift{
+    height: 4vh ;
+    width: 9.5vw;
+    background-color: rgb(174, 6, 6);
+    color: white;
+    border-radius: 5px;
+    border: 1px solid white; 
+    text-align: center;
+}
+.comand{
+    height: 4vh ;
+    width: 6vw;
+    background-color: rgb(174, 6, 6);
+    color: white;
+    border-radius: 5px;
+    border: 1px solid white;
+    position: relative;
+    top: 6%;
+    text-align: center;
+    
+}
+.espace{
+    height: 4vh ;
+    width: 16vw;
+    background-color: rgb(174, 6, 6);
+    color: white;
+    border-radius: 5px;
+    border: 1px solid white;
+    position: relative;
+    top: 6%;
+    text-align: center; 
+}
+.fleche{
+    display: flex;
+}
+.gauche{
+    background-color: black;
+    width: 4vw;
+    color: white;
+    text-align:center ;
+    border-radius: 5px;
+    border: 1px solid white;
+    position: relative;
+    top: 22px;
+    height: 2vh;
+}
+.vertical{
+   position: relative;
+   left: 0.5px;
+}
+.up{
+    background-color: black;
+    width: 4.5vw;
+    color: white;
+    text-align:center ;
+    border-radius: 5px;
+    border: 1px solid white;
+}
+.down{
+    background-color: black;
+    width: 4.5vw;
+    color: white;
+    text-align:center ;
+    border-radius: 5px;
+    border: 1px solid white;
+}
+.droite{
+    background-color: black;
+    width: 4vw;
+    color: white;
+    text-align:center ;
+    border-radius: 5px;
+    border: 1px solid white;
+    position: relative;
+    left: 0;
+    top: 22px;
+    height:2vh ;
+}

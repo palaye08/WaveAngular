@@ -1,0 +1,70 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+body{
+    background-color: black;
+}
+
+
+.tete{
+    height: 25vh;
+    width: 13vw;
+    background-color: white;
+    position: absolute;
+    left: 25%;
+    border-radius: 50%;
+    top: 300px;
+    animation: move 2s infinite ;
+} 
+
+@keyframes move {
+   
+    0%{
+        transform: translateX(100px) rotateY(0deg); 
+    }
+   
+    25%{
+        transform: translateX(200px) rotateY(0deg); 
+    }
+    50%{
+        transform: translateX(400px) rotateY(0deg); 
+    }
+    75%{
+        transform: translateX(600px) rotateY(0deg); 
+    }
+   
+   100%{
+        transform: translateX(800px), rotateY(180deg);
+    }
+
+  
+     
+}
+.bouche{
+    background-color: #000;
+    height: 80px;
+    width: 80px;
+    position: relative;
+    left: 200px;
+    top: 65px;
+    rotate: 40deg;
+    animation: ferme 0.8s infinite ;
+} 
+@keyframes ferme {
+    25%{
+        left: 200px;
+      
+     }
+     50%{
+        left: 247px;
+     }
+     75%{
+        left: 200px;
+     }
+  
+    100%{
+        left: 247px;
+     } 
+}
+

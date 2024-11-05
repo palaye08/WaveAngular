@@ -1,0 +1,43 @@
+<div class="login-container">
+    <div class="login-card">
+      <h2>Numéro de téléphone</h2>
+      
+      <!-- Phone Input -->
+      <div class="input-group">
+        <div class="phone-input">
+          <span class="prefix">+221</span>
+          <input 
+            type="tel" 
+            [(ngModel)]="phoneNumber"
+            placeholder="XXXXXXXXX" 
+            pattern="[0-9]{9}" 
+            maxlength="9" 
+            [disabled]="otpSent">
+        </div>
+      </div>
+
+      <!-- OTP Input (shows after phone submission) -->
+      <div class="input-group" *ngIf="otpSent">
+        <div class="phone-input">
+          <input 
+            type="text" 
+            [(ngModel)]="otpCode"
+            placeholder="Entrez le code reçu" 
+            maxlength="6">
+        </div>
+      </div>
+
+      <!-- Error Message -->
+      <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <!-- Action Button -->
+      <button 
+        class="login-button" 
+        (click)="otpSent ? verifyOtp() : requestOtp()"
+        [disabled]="isLoading">
+        {{ !otpSent ? 'Login' : 'Valider' }}
+      </button>
+    </div>
+  </div>

@@ -1,0 +1,19 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+.menu{
+    background-color: black;
+}
+.menu ul{
+    display: flex; 
+}
+.menu li a{
+    text-decoration:none;
+    color: white;
+    display: block;
+    padding: 10px 20px;
+}
+.navigue li a:hover{
+    background: gray;
+}

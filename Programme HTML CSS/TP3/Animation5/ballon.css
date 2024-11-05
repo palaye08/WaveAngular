@@ -1,0 +1,76 @@
+*{
+    margin: 0%;
+    padding: 0%;
+    box-sizing: border-box;
+}
+body{
+    width: 100%;
+    height: 90vh;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.conteneur{
+    width: 30%;
+    height: 45%;
+    background-color: #253140;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    overflow:hidden;
+}
+.box{
+    width: 60%;
+    height: 80%;
+    position: absolute;
+    background-color: transparent;
+    border-top: 10px white solid;
+    display: flex;
+    justify-content: center;
+}
+
+.balle{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: white;
+    position: relative;
+    top: 60%;
+    transform-origin: 50% -250%;
+}
+
+.balle::before{
+    width: 2px;
+    height: 250px;
+    content: '';
+    background-color: white;
+    left: 30px;
+    top: -200px;
+    position: absolute;
+}
+
+.balle.devant{
+    animation: avant 2s linear 0s infinite alternate;
+}
+.balle.derriere{
+    animation: apres 2s linear 2s infinite alternate;
+}
+
+@keyframes avant{
+    from{
+        transform: rotate(40deg) ;
+    }
+    50%{
+        transform: rotate(0deg) ;
+    }
+}
+@keyframes apres{
+    from{
+        transform: rotate(-35deg) ;
+    }
+    50%{
+        transform: rotate(0deg) ;
+    }
+}

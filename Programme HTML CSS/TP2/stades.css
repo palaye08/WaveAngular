@@ -1,0 +1,1117 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.staduim .tirbineLeftGreen{
+    width: 5%;
+    height: 92%;
+    display: flex;
+    margin-left: 5px    ;
+    border-radius: 3%;
+    margin-top: 1%;
+    position: absolute;
+    top: -0.2%;
+    left: 0%;
+}
+
+.staduim .tirbineLeftGreen .greenOne{
+    width: 28%;
+    height: 90.5%;
+    display: block;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    position: absolute;
+    top: 1%;
+    left: 0%;
+}
+.staduim .tirbineLeftGreen .greenOne .firstRangeGreen{
+    width: 100%;
+    height: 5%;
+    background-color: rgb(35, 128, 17);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    margin: 37%;
+    margin-bottom: -25%;
+    padding-right: 10%;
+}
+
+
+.staduim .tirbineLeftGreen .greenTwon{
+    width: 30%;
+    height: 93%;
+    display: block;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    position: absolute;
+    top: 5%;
+    left: 50%;
+}
+
+.staduim .tirbineLeftGreen .greenTwon .secondRangeGreen{
+    width: 85%;
+    height: 4.5%;
+    background-color: rgb(35, 128, 17);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    margin: 40%;
+    margin-bottom: -30%;
+    margin-left: 1%;
+    position: relative;
+    top: -1%;
+    left: 0%;
+}
+
+
+.staduim .tirbineLeftYellow{
+    width: 6%;
+    height: 80%;
+    display: flex;
+    margin-left: 5px;
+    border-radius: 3%;
+    position: absolute;
+    left: 5%;
+}
+
+
+
+
+.staduim .tirbineLeftYellow .yellowOne{
+    width: 50%;
+    height: 85%;
+    display: block;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    position: absolute;
+    color: white;
+    text-align: center;
+    
+    font-size: 16px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+    top: 1%;
+    left: 5%;
+}
+.staduim .tirbineLeftYellow .yellowOne .firstRangeYellow{
+    width: 50%;
+    height: 4.7%;
+    background-color: rgb(237, 226, 9);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    margin: 5%;
+    position: relative;
+    top: 2%;
+    left: -29%;
+
+}
+
+
+.staduim .tirbineLeftYellow .yelloTwon{
+    width: 40%;
+    height: 70%;
+    display: block;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    position: absolute;
+    top: 6%;
+    left: 40%;
+}
+.staduim .tirbineLeftYellow .yelloTwon .secondRangeYellow{
+    width: 70%;
+    height: 5%;
+    background-color: rgb(237, 226, 9);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%; 
+
+    position: relative;
+    top: 1%;
+    left: -30%;
+    margin: 25%;
+    margin-bottom: -20%;
+
+}
+
+
+/* **********************rouge********************** */
+.staduim .tirbineLeftRed{
+    width: 7.5%;
+    height: 74%;
+    display: flex;
+    margin-left: 5px;
+    border-radius: 3%;
+    position: absolute;
+    left: 10%;
+}
+
+.staduim .tirbineLeftRed .redOne{
+    width: 48%;
+    height: 90%;
+    display: block;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    position: absolute;
+
+    top: 7%;
+    left: 0%;
+}
+
+.staduim .tirbineLeftRed .redOne .firstRangRed{
+    width: 42%;
+    height: 4.1%;
+    background-color: rgb(241, 44, 5);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    margin: 1.8%;
+    margin-left: -1%;
+    position: relative;
+    margin-top: 5%;
+    top: 0;
+    left: 0%;
+
+
+}
+
+
+.staduim .tirbineLeftRed .redTwon{
+    width: 40%;
+    height: 90%;
+    display: block;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    position: absolute;
+    color: white;
+    text-align: center;
+    font-size: 16px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+    top: 12%;
+    left: -18%;
+}
+
+.staduim .tirbineLeftRed .redTwon .secondRangRed{
+    width: 45%;
+    height: 3.8%;
+    background-color: rgb(241, 44, 5);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    position: relative;
+    top: 1%;
+    left: 120%;
+    margin-bottom: 9%;
+
+}
+
+
+
+
+
+.staduim .tirbineRightGreen{
+    width: 5%;
+    height: 92%;
+    display: flex;
+    margin-left: 5px    ;
+    border-radius: 3%;
+    margin-top: 1%;
+    position: absolute;
+    top: -0.2%;
+    left: 0%;
+}
+
+.staduim .tirbineRightGreen .greenOneRight{
+    width: 30%;
+    height: 70%;
+    display: block;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    position: absolute;
+    top: 30%;
+    left: 1900%;
+    rotate: 180deg;
+}
+.staduim .tirbineRightGreen .greenOneRight .firstRangeGreen{
+    width: 100%;
+    height: 5%;
+    background-color: rgb(35, 128, 17);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    margin: 37%;
+    margin-bottom: -25%;
+    padding-right: 10%;
+    
+}
+
+
+.staduim .tirbineRightGreen .greenTwonRight{
+    width: 40%;
+    height: 95%;
+    display: block;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    position: absolute;
+    color: white;
+    font-size: 16px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    top: 6.9%;
+    left: 1970%;
+    rotate: 180deg;
+}
+
+.staduim .tirbineRightGreen .greenTwonRight .secondRangeGreen{
+    width: 85%;
+    height: 4.5%;
+    background-color: rgb(35, 128, 17);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    margin: 40%;
+    margin-bottom: -30%;
+    margin-left: 1%;
+    position: relative;
+    top: -1%;
+    left: 100%;
+}
+
+
+/* ****************************coin droite jaune ******************************* */
+
+.staduim .tirbineRightYellow{
+    width: 6%;
+    height: 70%;
+    display: flex;
+    margin-left: 5px;
+    border-radius: 3%;
+    position: absolute;
+    left: 5%;
+}
+
+
+.staduim .tirbineRightYellow .yellowOneRight{
+    width: 50%;
+    height: 80%;
+    display: block;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    position: absolute;
+
+    top: 22%;
+    left: 1430%;
+    rotate: 180deg;
+}
+.staduim .tirbineRightYellow .yellowOneRight .firstRangeYellow{
+    width: 50.8%;
+    height: 4.7%;
+    background-color: rgb(237, 226, 9);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    margin: 5%;
+    margin-left: -1%;
+    position: relative;
+    top: 2%;
+    left: 0;
+
+}
+
+
+.staduim .tirbineRightYellow .yellowTwonRight{
+    width: 40%;
+    height: 50%;
+    display: block;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    position: absolute;
+    color: white;
+    text-align: center;
+    font-size: 16px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+    top: 47%;
+    left: 1410%;
+    rotate: 180deg;
+}
+.staduim .tirbineRightYellow .yellowTwonRight .secondRangeYellow{
+    width: 50%;
+    height: 7%;
+    background-color: rgb(237, 226, 9);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    margin: 16%;
+   
+    
+}
+
+
+/* **********************coin droite rouge******************************** */
+.staduim .tirbineRightRed{
+    width: 7.5%;
+    height: 74%;
+    display: flex;
+    margin-left: 5px;
+    border-radius: 3%;
+    position: absolute;
+    left: 11.5%;
+}
+
+.staduim .tirbineRightRed .redOneRight{
+    width: 50%;
+    height: 65%;
+    display: block;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    position: absolute;
+    color: white;
+    text-align: center;
+    font-size: 16px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+    top: 1%;
+    left: 1040%;
+    rotate: 180deg;
+}
+
+.staduim .tirbineRightRed .redOneRight .firstRangRed{
+    width: 38%;
+    height: 5%;
+    background-color: rgb(241, 44, 5);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    margin: 7%;
+    margin-left: -1%;
+    position: relative;
+ 
+    top: -35%;
+    left: 90%;
+
+
+}
+
+
+.staduim .tirbineRightRed .redTwonRight{
+    width: 40%;
+    height: 60%;
+    display: block;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    position: absolute;
+    color: white;
+    text-align: center;
+    font-size: 16px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+    top: 24%;
+    left: 975%;
+    rotate: 180deg;
+}
+
+.staduim .tirbineRightRed .redTwonRight .secondRangRed{
+    width: 45%;
+    height: 5%;
+    background-color: rgb(241, 44, 5);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    position: relative;
+    top: 1%;
+    left: 10%;
+    margin-bottom: 9%;
+
+}
+
+/* ********************coin du  top vert ************************ */
+.staduim .tirbineTopGreen{
+    width: 4%;
+    height: 92%;
+    display: flex;
+    margin-left: 5px    ;
+    border-radius: 3%;
+    margin-top: 1%;
+    position: absolute;
+    top: -0.2%;
+    left: 0%;
+}
+
+.staduim .tirbineTopGreen .greenTopOne{
+    width: 35%;
+    height: 80%;
+    display: block;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    position: absolute;
+    color: white;
+    top: -39.5%;
+    left: 1950%;
+    rotate: 90deg;
+}
+.staduim .tirbineTopGreen .greenTopOne .firstRangeGreen{
+    width: 100%;
+    height: 5%;
+    background-color: rgb(35, 128, 17);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    margin: 52%;
+    margin-bottom: -30%;
+    padding-right: 10%;
+}
+
+
+.staduim .tirbineTopGreen .greenTopTwon{
+    width: 37%;
+    height: 84%;
+    display: block;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    position: absolute;
+    top: -35.8%;
+    left: 1870%;
+    rotate: 90deg;
+}
+
+.staduim .tirbineTopGreen .greenTopTwon .secondRangeGreen{
+    width: 85%;
+    height: 4.5%;
+    background-color: rgb(35, 128, 17);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    margin: 43%;
+    margin-bottom: -30%;
+    margin-left: 1%;
+    position: relative;
+    top: -1%;
+    left: 0%;
+}
+
+
+
+
+/* *********coin top yellow **********************/
+.staduim .tirbineTopYellow{
+    width: 5%;
+    height: 65%;
+    display: flex;
+    border-radius: 3%;
+    position: absolute;
+    left: 5%;
+}
+
+
+
+
+.staduim .tirbineTopYellow .yellowTopOne{
+    width: 45%;
+    height: 100%;
+    display: block;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    position: absolute;
+    top: -60%;
+  
+    left: 1410%;
+    rotate: 90deg;
+}
+.staduim .tirbineTopYellow .yellowTopOne .firstRangeYellow{
+    width: 50.8%;
+    height: 4.7%;
+    background-color: rgb(237, 226, 9);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    margin: 8%;
+    margin-left: -1%;
+    position: relative;
+    top: 2%;
+    left: 0;
+
+}
+
+
+.staduim .tirbineTopYellow .yellowTopTwon{
+    width: 35%;
+    height: 120%;
+    display: block;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    position: absolute;
+    color: white;
+    text-align: center;
+    font-size: 16px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    top: -67%;
+    left: 1300%;
+    rotate: 90deg;
+}
+.staduim .tirbineTopYellow .yellowTopTwon .secondRangeYellow{
+    width: 70.9%;
+    height: 3.5%;
+    background-color: rgb(237, 226, 9);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    margin: 15%;
+   
+    
+}
+
+
+
+
+
+/* **********************top red********************** */
+.staduim .tirbineToptRed{
+    width: 6%;
+    height: 74%;
+    display: flex;
+    margin-left: 5px;
+    border-radius: 3%;
+    position: absolute;
+    left: 11.5%;
+}
+
+.staduim .tirbineToptRed .redOneTop{
+    width: 48%;
+    height: 90%;
+    display: block;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    position: absolute;
+    color: white;
+    text-align: center;
+    font-size: 16px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+    top: -42%;
+    left: 980%;
+    rotate: 90deg;
+}
+
+.staduim .tirbineToptRed .redOneTop .firstRangRed{
+    width: 40%;
+    height: 4.1%;
+    background-color: rgb(241, 44, 5);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    margin: 10%;
+    position: relative;
+    margin-top: 5%;
+    top: 0;
+    left: 30%;
+
+
+}
+
+
+.staduim .tirbineToptRed .redTwonTop{
+    width: 50%;
+    height: 100%;
+    display: block;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    position: absolute;
+    color: white;
+    text-align: center;
+    font-size: 16px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+    top: -38.9%;
+    left: 910%;
+    rotate: 90deg;
+}
+
+.staduim .tirbineToptRed .redTwonTop .secondRangRed{
+    width: 40%;
+    height: 3.8%;
+    background-color: rgb(241, 44, 5);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    position: relative;
+    top: 1%;
+    left: 0%;
+    margin-bottom: 9%;
+
+}
+
+
+
+
+
+
+/* ********************coin  en bas  du  vert ************************ */
+.staduim .tirbineBottomGreen{
+    width: 4%;
+    height: 92%;
+    display: flex;
+    margin-left: 5px    ;
+    border-radius: 3%;
+    margin-top: 1%;
+    position: absolute;
+    top: -0.2%;
+    left: 0%;
+}
+
+.staduim .tirbineBottomGreen .greenBottomOne{
+    width: 31%;
+    height: 70%;
+    display: block;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    position: absolute;
+    color: white;
+    bottom: -40%;
+    left: 420%;
+    rotate: 2070deg;
+}
+.staduim .tirbineBottomGreen .greenBottomOne .firstRangeGreen{
+    width: 100%;
+    height: 5%;
+    background-color: rgb(35, 128, 17);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    margin: 52%;
+}
+
+
+
+.staduim .tirbineBottomGreen .greenBottomTwon{
+    width: 34%;
+    height: 84%;
+    display: block;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    position: absolute;
+    bottom: -41.9%;
+    left: 600%;
+    rotate: 270deg;
+}
+
+.staduim .tirbineBottomGreen .greenBottomTwon .secondRangeGreen{
+    width: 85%;
+    height: 4.5%;
+    background-color: rgb(35, 128, 17);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    margin: 43%;
+    margin-bottom: -30%;
+    margin-left: 1%;
+    position: relative;
+    top: -1%;
+    left: 0%;
+}
+
+
+
+
+/* *********coin bottom yellow **********************/
+.staduim .tirbineBottomYellow{
+    width: 5%;
+    height: 65%;
+    display: flex;
+    border-radius: 3%;
+    position: absolute;
+    left: 5%;
+}
+
+
+
+
+.staduim .tirbineBottomYellow .yellowBottomOne{
+    width: 41%;
+    height: 100%;
+    display: block;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    position: absolute;
+    bottom: -61%;
+  
+    left: 350%;
+    rotate: 270deg;
+}
+.staduim .tirbineBottomYellow .yellowBottomOne .firstRangeYellow{
+    width: 50.8%;
+    height: 4.7%;
+    background-color: rgb(237, 226, 9);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    margin: 8%;
+    margin-left: -1%;
+    position: relative;
+    top: 2%;
+    left: 0;
+
+}
+
+
+.staduim .tirbineBottomYellow .yellowBottomTwon{
+    width: 32%;
+    height: 120%;
+    display: block;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    position: absolute;
+    color: white;
+    text-align: center;
+    font-size: 16px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    bottom: -68%;
+    left: 480%;
+    rotate: 270deg;
+}
+.staduim .tirbineBottomYellow .yellowBottomTwon .secondRangeYellow{
+    width: 70.9%;
+    height: 3.5%;
+    background-color: rgb(237, 226, 9);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    margin: 15%;
+
+    
+}
+
+
+/* **********************bottom  red********************** */
+.staduim .tirbineBottomRed{
+    width: 6%;
+    height: 74%;
+    display: flex;
+    margin-left: 5px;
+    border-radius: 3%;
+    position: absolute;
+    left: 11.5%;
+}
+
+.staduim .tirbineBottomRed .redOneBottom{
+    width: 40%;
+    height: 90%;
+    display: block;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    position: absolute;
+    color: white;
+    text-align: center;
+    font-size: 16px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+    bottom: -42%;
+    left: 280%;
+    rotate: 270deg;
+}
+
+.staduim .tirbineBottomRed .redOneBottom .firstRangRed{
+    width: 40%;
+    height: 4.1%;
+    background-color: rgb(241, 44, 5);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    margin: 10%;
+    position: relative;
+    margin-top: 5%;
+    top: 0;
+    left: 30%;
+
+
+}
+
+
+.staduim .tirbineBottomRed .redTwonBottom{
+    width: 40%;
+    height: 100%;
+    display: block;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    position: absolute;
+    color: white;
+    text-align: center;
+    font-size: 16px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+    bottom: -40%;
+    left: 320%;
+    rotate: 270deg;
+}
+
+.staduim .tirbineBottomRed .redTwonBottom .secondRangRed{
+    width: 40%;
+    height: 3.8%;
+    background-color: rgb(241, 44, 5);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    position: relative;
+    top: 1%;
+    left: 0%;
+    margin-bottom: 9%;
+
+}
+
+
+
+
+
+
+/* ****************section poulouss************************************** */
+
+.staduim{
+    width: 99%;
+    height: 95vh;
+    background: #000000;
+    margin-top: 10px;
+    padding: 7%;
+    margin-left: 10px;
+    margin-top: 1%;
+    margin-right: 20px;
+    border-radius: 50px;
+}
+.avantPoulouss{
+
+    width: 70%;
+    height: 80%;
+    background-color: rgb(20, 63, 20);
+    display: flex;
+    align-items: center;
+    margin-left: 15%;
+    border-radius: 3%;
+    margin-top: 4%;
+}
+.avantPoulouss .nbrePlaces{
+    color: white;
+    font-size: 16px;
+    font-family: 'Times New Roman', Times, serif;
+    position: absolute;
+    top: 24%;
+    left: 65%;
+
+}
+.poulouss{
+    width: 96%;
+    height: 78%;
+    background-color: rgb(16, 99, 16);
+    display: flex;
+    align-items: center;
+    margin-left: 2.7%;
+    padding-top: 38%;
+    margin-right: 2.7%;
+    display: flex;
+    position: relative;
+    
+}
+.carreOne{
+    width: 50%;
+    height: 47vh;
+    border: 1px solid white;
+    position: absolute;
+    top: 2%;
+    display: flex;
+    
+    
+}
+.carreTwon{
+    width: 50%;
+    height: 47vh;
+    border: 1px solid white;
+    position: absolute;
+    top:2%;
+    left: 50%;
+    display: flex;
+    padding-left: 2%;
+    
+
+} 
+.center{
+    width: 100px;
+    height: 100px;
+    border: 1px solid white;
+    border-radius: 80%;
+    align-self: center;
+    position: absolute;
+    top: 38.9%;
+    left: 45.4%;
+}
+.center .pointCenter{
+    width: 10px; 
+    height:10px; ;
+    background-color: white;
+    border-radius: 1px solid black;
+    position: absolute;
+    border-radius: 50px;
+    top: 43px;
+    left: 43px;
+    
+
+}
+
+/* design gazon**************************************** */
+.carreOne .greenClaire{
+    width: 13%;
+    height: 46vh;
+    background-color: rgb(16, 99, 16);
+    
+} 
+
+.carreOne .greenFonce{
+    width: 10%;
+    height: 46.4vh;
+    background-color: rgb(23, 78, 23);
+
+    
+} 
+
+
+
+
+
+.carreTwon .greenClaire{
+    width: 13%;
+    height: 46vh;
+    background-color: rgb(16, 99, 16);
+    
+} 
+
+.carreTwon .greenFonce{
+    width: 11%;
+    height: 46.4vh;
+    background-color: rgb(23, 78, 23);
+
+    
+} 
+
+/* *************************************************coins**************** */
+
+
+.poulouss  .coinTopRight{
+    width: 3%;
+    height: 8%;
+    border: 1px solid white;
+    position: absolute;
+    border-bottom-left-radius: 100%;
+    right: 0;
+    top: 2%;
+}
+.poulouss .coinTopBottom{
+    width: 3%;
+    height: 8%;
+    border: 1px solid white;
+    position: absolute;
+    border-top-left-radius: 100%;
+    border-bottom: none;
+    right: 0;
+    bottom: 2%;
+
+}
+
+.poulouss  .coinTopLeft{
+    width: 3%;
+    height: 8%;
+    border: 1px solid white;
+    position: absolute;
+    border-bottom-right-radius: 100%;
+    left: 0;
+    top: 2%;
+    
+
+}
+.poulouss  .coinBottomLeft{
+    width: 3%;
+    height: 8%;
+    border: 1px solid white;
+    position: absolute;
+    border-top-right-radius: 100%;
+    left: 0;
+    bottom: 2%;
+    border-bottom: none;
+}
+/* **********************************************surface_pauteaux*************   */
+
+.poulouss .arcSurfaceGauche{
+    
+
+    width: 1.9%;
+    height: 11%;
+    border: 1px solid white;
+    position: absolute;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+
+    left: 10%;
+    top: 48%;
+    border-left: none;
+    /* border-bottom: none; */
+    
+    
+}
+
+.poulouss .spaceGardienGauche{
+    width: 10%;
+    height: 40%;
+    border: 1px solid white;
+    position: absolute;
+    left: 0;
+    top: 32%;
+    border-left: none;
+}
+
+.poulouss .spaceGardienGauche .pauteauxGauche{
+    width: 40%;
+    height: 60%;
+    border: 1px solid white;
+    position: absolute;
+    top: 20%;
+    left: 0;
+    border-left: none;
+}
+
+.poulouss .surfaceGauche .spaceGardienGauche  .pointCenterGardienLeft{
+    width: 0.5rem; 
+    height:0.5rem; 
+    background-color: white;
+    border-radius: 1px solid black;
+    position: absolute;
+    border-radius: 50px;
+    top: 5.2rem;
+    left: 3.5rem;
+    
+}
+
+
+.poulouss .arcSurfaceDroite{
+    
+
+    width: 1.9%;
+    height: 11%;
+    border: 1px solid white;
+    position: absolute;
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%; 
+
+    right: 10%;
+    top: 47%;
+    border-right: none;
+    /* border-bottom: none; */
+    
+    
+}
+
+.poulouss .surfaceDroite .spaceGardienDroite  .pointCenterGardienRight{
+    width: 0.5rem; 
+    height:0.5rem; 
+    background-color: white;
+    border-radius: 1px solid black;
+    position: absolute;
+    border-radius: 50px;
+    top: 5.2rem;
+    right: 3.5rem;
+    
+}
+.poulouss .spaceGardienDroite{
+    width: 10%;
+    height: 40%;
+    border: 1px solid white;
+    position: absolute;
+    right: 0;
+    top: 32%;
+    border-right: none;
+}
+
+
+.poulouss  .spaceGardienDroite .pauteauxDroite{
+    width: 40%;
+    height: 60%;
+    border: 1px solid white;
+    position: absolute;
+    top: 20%;
+    right: 0;
+    border-right: none;
+}
+
+

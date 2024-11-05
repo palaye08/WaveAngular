@@ -1,0 +1,64 @@
+*{
+    padding: 0;
+    margin: 0;
+    
+}
+body{
+    background-color: rgb(39, 59, 69);
+  
+}
+.contenu{
+    position: relative;
+    left: 45%;
+    top: 100px;
+    height: 200px;
+    width: 200px;
+    display: flex;
+    background-color: rgb(39, 59, 69);
+    flex-wrap: wrap;
+    box-sizing: border-box; 
+    rotate: 45deg;
+   
+}
+.carre1,.carre2,.carre3,.carre4{
+    width: 45%;
+    height: 45%;
+    margin: 2%;
+  
+}
+.carre1{
+    background-color:rgb(84, 245, 178);
+    animation:  tourne1 1.5s infinite;
+}
+.carre2{
+    background-color: red;
+    animation:  tourne2 1.5s infinite;
+}
+.carre3{
+    background-color:yellow;
+    animation:  tourne3 1.5s infinite;
+}
+.carre4{
+    background-color:  blue;
+    animation:  tourne4 1.5s infinite;
+}
+@keyframes tourne1{
+    0%{
+        transform: translate(-30px) perspective(100px) rotate(-90deg);
+    }
+}
+@keyframes tourne2{
+    0%{
+        transform: translate(30px) perspective(100px)  rotate(-90deg);
+    }
+}
+@keyframes tourne3{
+    0%{
+        transform: translateX(-30px) perspective(100px) rotate(-90deg);
+    }
+}
+@keyframes tourne4{
+    0%{
+        transform: translateY(30px) perspective(100px) rotate(-90deg);
+    }
+}

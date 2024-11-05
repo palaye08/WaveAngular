@@ -1,0 +1,28 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+body{
+    background-color: rgb(135, 210, 120);
+}
+.plaque{
+    height: 200px;
+    width: 200px;
+    border-radius: 10px;
+    background-color: white;
+    position: relative;
+    left: 45%;
+    bottom: -340px;
+    animation: tourne 2s infinite ;
+}
+@keyframes tourne {
+    0%{
+        transform: rotateX(0deg) rotateY(-180deg);
+    }
+    50%{
+        transform: rotateX(0deg) rotateY(0deg);
+    }
+    100%{
+        transform: rotateX(-180deg) rotateY(0deg);
+    }
+}

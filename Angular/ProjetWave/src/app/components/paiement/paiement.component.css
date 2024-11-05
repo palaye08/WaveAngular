@@ -1,0 +1,219 @@
+/* Styles existants */
+:host {
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f0f8ff;
+    padding: 20px;
+  }
+  
+  .payment-container {
+    width: 45%;
+    min-width: 375px;
+    padding: 24px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(135, 206, 235, 0.2);
+    border-radius: 12px;
+    height: fit-content;
+  }
+  
+  /* Grille des sociétés */
+  .societes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+  }
+  
+  .societe-card {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .societe-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #e6f3ff;
+  }
+  
+  .societe-logo {
+    width: 60px;
+    height: 60px;
+    margin-right: 15px;
+  }
+  
+  .societe-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .societe-info h3 {
+    margin: 0;
+    color: #333;
+    font-size: 16px;
+  }
+  
+  .societe-id {
+    margin: 5px 0 0;
+    color: #666;
+    font-size: 14px;
+  }
+  
+  /* Styles du popup */
+  .dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .dialog-content {
+    background-color: white;
+    border-radius: 12px;
+    padding: 24px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  .dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .dialog-header h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #333;
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+  }
+  
+  .dialog-body {
+    margin-bottom: 24px;
+  }
+  
+  .selected-societe {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+  }
+  
+  .dialog-societe-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    margin-right: 15px;
+  }
+  
+  .montant-input {
+    margin-bottom: 20px;
+  }
+  
+  .montant-input label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+  }
+  
+  .montant-input input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+  }
+  
+  .dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+  
+  .cancel-button,
+  .pay-button {
+    padding: 12px 24px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s;
+  }
+  
+  .cancel-button {
+    background-color: #e0e0e0;
+    color: #333;
+  }
+  
+  .pay-button {
+    background-color: #4da9ff;
+    color: white;
+  }
+  
+  .pay-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .alert {
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+  }
+  
+  .alert.error {
+    background-color: #ffe6e6;
+    color: #cc0000;
+  }
+  
+  .alert.success {
+    background-color: #e6ffe6;
+    color: #006600;
+  }
+  
+  /* Responsive */
+  @media screen and (max-width: 768px) {
+    .payment-container {
+      width: 100%;
+      min-width: auto;
+      margin: 0;
+      border-radius: 0;
+    }
+  
+    :host {
+      padding: 0;
+    }
+  
+    .societes-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .dialog-content {
+      width: 95%;
+      margin: 10px;
+    }
+  }

@@ -1,0 +1,96 @@
+<div class="payment-container">
+    <!-- Header avec titre -->
+    <div class="header">
+      <h1>Paiements</h1>
+    </div>
+  
+    <!-- Barre de recherche -->
+    <div class="search-bar">
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        (input)="filterSocietes()"
+        placeholder="Rechercher une société..." 
+        class="search-input">
+    </div>
+  
+    <!-- Message de succès global -->
+    <div class="alert success" *ngIf="successMessage">
+      {{ successMessage }}
+    </div>
+  
+    <!-- Message d'erreur global -->
+    <div class="alert error" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+  
+    <!-- Liste des sociétés -->
+    <div class="societes-grid">
+      <div 
+        *ngFor="let societe of filteredSocietes" 
+        class="societe-card"
+        (click)="openPaiementDialog(societe)">
+        <div class="societe-logo">
+          <img [src]="societe.photo" [alt]="societe.nom">
+        </div>
+        <div class="societe-info">
+          <h3>{{societe.nom}} {{societe.prenom}}</h3>
+          <p class="societe-id">{{societe.identifiant}}</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Popup de paiement -->
+    <div class="dialog-overlay" *ngIf="showDialog" (click)="closeDialog()">
+      <div class="dialog-content" (click)="$event.stopPropagation()">
+        <div class="dialog-header">
+          <h2>Paiement à {{selectedSociete?.nom}} {{selectedSociete?.prenom}}</h2>
+          <button class="close-button" (click)="closeDialog()">&times;</button>
+        </div>
+  
+        <div class="dialog-body">
+          <div class="selected-societe">
+            <img [src]="selectedSociete?.photo" [alt]="selectedSociete?.nom" class="dialog-societe-logo">
+            <div class="dialog-societe-info">
+              <p class="dialog-societe-name">{{selectedSociete?.nom}} {{selectedSociete?.prenom}}</p>
+              <p class="dialog-societe-id">{{selectedSociete?.identifiant}}</p>
+            </div>
+          </div>
+  
+          <div class="montant-input">
+            <label for="montant">Montant à payer</label>
+            <input 
+              type="number" 
+              id="montant"
+              [(ngModel)]="montant" 
+              placeholder="Saisir le montant"
+              [disabled]="isLoading">
+          </div>
+  
+          <div class="alert error" *ngIf="errorMessage">
+            {{ errorMessage }}
+          </div>
+  
+          <div class="alert success" *ngIf="successMessage">
+            {{ successMessage }}
+          </div>
+        </div>
+  
+        <div class="dialog-footer">
+          <button 
+            class="cancel-button" 
+            (click)="closeDialog()" 
+            [disabled]="isLoading">
+            Annuler
+          </button>
+          <button 
+            class="pay-button" 
+            (click)="effectuerPaiement()" 
+            [disabled]="isLoading || !montant || montant <= 0">
+            <span *ngIf="!isLoading">Payer {{montant}} FCFA</span>
+            <span *ngIf="isLoading">Traitement...</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>

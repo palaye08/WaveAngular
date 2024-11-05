@@ -1,0 +1,87 @@
+.box{
+    margin: 0 auto;
+    text-align: center;
+    border: solid black 2px;
+    width: 35vw;
+    height: 10vh;
+    position: relative;
+}
+.titre{
+    position: relative;
+    z-index: 1;
+}
+.boxes{
+    display: flex;
+    justify-content: space-around;
+    position: relative;
+}
+
+.top{
+    width: 1vw;
+    height: 1vh;
+}
+.top{
+    transition-property: position,background-color, height,width;
+    transition-duration: 1s;
+}
+
+.box:hover > .boxes > .top{
+    position: absolute;
+    top: -80px;
+    background-color: green;
+    height: 4vh;
+    width: 6vw;
+}
+.left{
+    width: 1vw;
+    height: 1vh;
+}
+
+.left{
+    transition-property: position,background-color, height,width;
+    transition-duration: 2s;  
+}
+
+.box:hover >.boxes > .left{
+    position: absolute;
+    top: -55px;
+    right: 0;
+    height: 5vh;
+    width: 18vw;
+    background-color: green;
+}
+
+.bottom{
+    width: 1vw;
+    height: 1vh;
+}
+.bottom{
+    transition-property: position,background-color, height,width;
+    transition-duration: 3s;
+}
+
+.box:hover > .boxes > .bottom{
+    position: absolute;
+    top: -35px;
+    height: 4vh;
+    width: 6vw;
+    background-color: green;
+}
+
+.right{
+    width: 1vw;
+    height: 1vh;
+}
+.right{
+    transition-property: position,background-color, height,width;
+    transition-duration: 4s;
+}
+
+.box:hover>.boxes>.right{
+    position: absolute;
+    top: -55px;
+    left: 0;
+    height: 5vh;
+    width: 18vw;
+    background-color: green;
+}

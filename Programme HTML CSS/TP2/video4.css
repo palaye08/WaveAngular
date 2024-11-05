@@ -1,0 +1,14 @@
+
+.guide{
+    position: relative;
+    left: 7%;
+    background-color: gray;
+    width: 15%;
+    visibility: hidden;
+    padding: 2px 6px;
+    text-align: center; 
+    border-radius: 6px;
+}
+.tout:hover .guide{
+    visibility: visible;
+}

@@ -1,0 +1,64 @@
+<app-toast></app-toast>
+
+
+<div class="transfer-container">
+  <div class="header">
+    <h2>Envoyer de l'Argent</h2>
+    <button class="new-number-btn">
+      <i class="fas fa-phone"></i>
+      + Envoyer à un nouveau numéro
+    </button>
+  </div>
+
+  <div class="tabs">
+    <button [class.active]="activeTab === 'favoris'" (click)="setActiveTab('favoris')">
+      <i class="fas fa-star"></i> Favoris
+    </button>
+    <button [class.active]="activeTab === 'contacts'" (click)="setActiveTab('contacts')">
+      <i class="fas fa-users"></i> Contacts
+    </button>
+  </div>
+
+  <div class="users-list">
+    <div *ngFor="let user of users" class="user-item" (click)="openTransferModal(user)">
+      <div class="user-avatar">
+        <img [src]="user.photo" alt="Photo de profil" onerror="this.src='assets/default-avatar.png'">
+      </div>
+      <div class="user-info">
+        <div class="user-name">{{user.prenom}} {{user.nom}}</div>
+        <div class="user-phone">{{user.telephone}}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de transfert -->
+<div class="modal" *ngIf="showModal" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Transfert à {{selectedUser?.prenom}} {{selectedUser?.nom}}</h3>
+        <button class="close-btn" (click)="closeModal()">&times;</button>
+      </div>
+      
+      <!-- Condition pour afficher le message de succès -->
+      <div *ngIf="successMessage" class="success-message">
+        {{ successMessage }}
+      </div>
+      
+      <!-- Ne montrer le contenu du formulaire que s'il n'y a pas de message de succès -->
+      <ng-container *ngIf="!successMessage">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Montant</label>
+            <input type="text" [(ngModel)]="montant" placeholder="Entrez le montant">
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="cancel-btn" (click)="closeModal()">Annuler</button>
+          <button class="send-btn" (click)="[sendTransfer(),closeModal()]" [disabled]="!montant">
+            Envoyer
+          </button>
+        </div>
+      </ng-container>
+    </div>
+  </div>

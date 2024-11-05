@@ -1,0 +1,64 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.contenu {
+  position: relative;
+  width: 20%;
+  height: 10%;
+  border: 5px solid rgb(201, 201, 201);
+  overflow: hidden;
+}
+
+.div1 {
+  position: absolute;
+  background-color: red;
+  width: 60%;
+  height: 100%;
+  transform-origin: bottom left;
+  transform: rotate(-90deg);
+  transition: 1s;
+}
+
+.div2 {
+  position: absolute;
+  background-color: red;
+  width: 60%;
+  height: 100%;
+  right: 0; 
+  transform: rotate(90deg);
+  transform-origin: right bottom;
+  transition: 1s;
+}
+.contenu:hover .div2{
+  transform: rotate(0deg);
+}
+
+.contenu:hover .div1 {
+  transform: rotate(0deg);
+}
+
+h2 {
+  position: absolute;
+  margin-top: 5%;
+  margin-left: 5%;
+  color: red;
+  z-index: 2;
+  transition: 1s;
+}
+
+.contenu:hover h2 {
+  color: rgb(255, 171, 171) ; 
+  transition: 1s;
+}

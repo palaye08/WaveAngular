@@ -1,0 +1,65 @@
+<div class="home-container">
+  <div class="header">
+    <button class="settings-btn">
+      <i class="fas fa-cog"></i>
+    </button>
+  </div>
+
+  <div class="balance-section">
+    <h1 class="balance-amount">{{getDisplayBalance()}}</h1>
+    <div class="card-dots">
+    
+      <i class="fas" 
+         [class.fa-eye]="isBalanceHidden" 
+         [class.fa-eye-slash]="!isBalanceHidden" 
+         (click)="toggleBalanceVisibility()"
+         style="cursor: pointer;"></i>
+    </div>
+  </div>
+
+  <div class="qr-card">
+    <div class="qr-code">
+      <img [src]="qrCodeData" alt="QR Code">
+      <div class="scanner-text">
+        <i class="fas fa-camera"></i>
+        Scanner
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-options">
+    <div class="menu-row">
+      <div class="menu-item">
+        <a [routerLink]="['/transfert']">
+          <div class="icon-circle transfert">
+            <i class="fas fa-users"></i>
+          </div>
+        </a>
+        <span>Transfert</span>
+      </div>
+      <div class="menu-item">
+        <a href="/paiements">
+          <div class="icon-circle paiements">
+            <i class="fas fa-shopping-basket"></i>
+          </div>
+        </a>
+        <span>Paiements</span>
+      </div>
+      <div class="menu-item">
+        <a href="/credit">
+          <div class="icon-circle credit">
+            <i class="fas fa-mobile-alt"></i>
+          </div>
+        </a>
+        <span>Crédit</span>
+      </div>
+      <div class="menu-item">
+        <div class="icon-circle banque">
+          <i class="fas fa-university"></i>
+        </div>
+        <span>Banque</span>
+      </div>
+    </div>
+  </div>
+  <app-history></app-history>
+</div>

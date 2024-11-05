@@ -1,0 +1,52 @@
+<div class="history-wrapper">
+    <div class="transactions-container">
+      <div *ngIf="isLoading" class="loading">
+        Chargement des transactions...
+      </div>
+      
+      <div *ngIf="error" class="error">
+        {{ error }}
+      </div>
+      
+      <div *ngIf="!isLoading && !error && transactions.length === 0" 
+           class="no-transactions">
+        Aucune transaction à afficher
+      </div>
+
+      <div class="transactions-list">
+        <div *ngFor="let transaction of transactions" 
+             class="transaction-item"
+             [ngClass]="transaction.type">
+          <div class="transaction-header">
+            <span class="transaction-date">
+              {{ formatDate(transaction.date) }}
+            </span>
+            <span class="transaction-time">
+              {{ formatTime(transaction.date) }}
+            </span>
+          </div>
+          <div class="transaction-content">
+            <div class="transaction-type">
+              {{ getTransactionTypeLabel(transaction.type) }}
+              <span *ngIf="transaction.receiverString">
+                à {{ transaction.receiverString }}
+              </span>
+            </div>
+            <div class="transaction-amount" 
+                 [ngClass]="{'negative': transaction.type === 'transfert'}">
+              {{ formatAmount(transaction.montant) }}
+            </div>
+          </div>
+          <div class="transaction-footer">
+            <span class="transaction-status" 
+                  [ngClass]="transaction.status.toLowerCase()">
+              {{ transaction.status }}
+            </span>
+            <span class="transaction-balance">
+              Solde: {{ formatAmount(transaction.solde_sender) }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

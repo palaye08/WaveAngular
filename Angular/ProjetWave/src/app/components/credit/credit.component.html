@@ -1,0 +1,60 @@
+<div class="credit-container">
+    <!-- Header avec bouton retour -->
+    <div class="header">
+      <button class="back-button" (click)="goBack()">
+        <i class="fas fa-chevron-left">&lt;</i>
+      </button>
+      <h1>Achat Crédit</h1>
+    </div>
+
+    <!-- Section Contacts -->
+    <div class="section">
+      <h2>Contacts</h2>
+      <div class="contact-list">
+        <div *ngFor="let contact of contacts" 
+             class="contact-item"
+             (click)="showCreditDialog(contact)">
+          <div class="contact-avatar" [ngStyle]="{'background-color': getOperatorColor(contact.telephone)}">
+            {{ contact.prenom[0] }}{{ contact.nom[0] }}
+          </div>
+          <div class="contact-info">
+            <div class="contact-name">{{ contact.prenom }} {{ contact.nom }}</div>
+            <div class="contact-number">{{ formatPhoneNumber(contact.telephone) }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dialog pour le montant -->
+    <div class="dialog-overlay" *ngIf="showDialog">
+      <div class="dialog">
+        <div class="dialog-content">
+          <div class="selected-contact">
+            <div class="contact-avatar large" [ngStyle]="{'background-color': getOperatorColor(selectedContact?.telephone || '')}">
+              {{ selectedContact?.prenom }}{{ selectedContact?.nom }}
+            </div>
+            <div class="contact-details">
+              <h3>{{ selectedContact?.prenom }} {{ selectedContact?.nom }}</h3>
+              <p>{{ formatPhoneNumber(selectedContact?.telephone || '') }}</p>
+            </div>
+          </div>
+          
+          <div class="amount-section">
+            <label>Montant</label>
+            <input type="number" 
+                   [(ngModel)]="creditAmount" 
+                   placeholder="Saisir le montant"
+                   min="500"
+                   step="100">
+          </div>
+
+          <button class="buy-button" 
+                  [ngClass]="{'active': isValidAmount()}"
+                  [disabled]="!isValidAmount()"
+                  (click)="purchaseCredit()">
+            Acheter
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,57 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+.stade{
+    height: 100vh;
+    width: 95%;
+    background-color: black;
+    border-radius: 15px;
+    position: relative;
+    margin-left: 3%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+.pelouse{
+    background-color: rgb(40, 108, 40);
+    height: 50%;
+    width: 55%;
+    position: relative;
+    left: 23%;
+    top: 25%;
+}
+.terrain{
+    border: 6px solid white;
+    background-color: green;
+    height: 85%;
+    width: 94%;
+    position: relative;
+    left: 3%;
+    top: 8%;
+    display: flex;
+    justify-content: space-between;
+}
+.transverse{
+  width: 10%;
+  background-color: rgb(27, 87, 6);
+}
+.transverse_m{
+    width: 10%;
+    background-color: rgb(27, 87, 6);
+  }
+.milieu{
+    border: 3px solid white; 
+    position: relative;
+    left: 50%;
+}
+
+.rond{
+    width: 5vw;
+    height: 9vh;
+    position:relative;
+    border: 8px solid white; 
+    left: 49%;
+    top:37%;
+    border-radius: 50%;
+
+} 

@@ -1,0 +1,102 @@
+*{
+   padding: 0; 
+   margin: 0;
+}
+
+.global{
+    border: 1px;
+    border-color: green;
+    border-style: solid;
+    position: relative;
+    margin-top: 15%;
+    margin-left: 10%;
+}
+.haut{
+    background-color: orange;
+    height: 7vh;
+}
+.menu{
+    background-color: blue;
+    height: 4vh;
+}
+.fisrt{
+    height: 21vh;
+    display: flex;
+    position: relative;
+    left: 10%;
+    margin-top: 5%; 
+    
+}
+.rouge{
+    background-color: red;
+    width: 40%;
+}
+.gris{
+    background-color: gray;
+    width: 40%;
+}
+.second{
+    height: 21vh;
+    display: flex;
+    position: relative;
+    left: 10%;
+    
+}
+.meuve{
+    background-color: rgb(180, 22, 201);
+    width: 40%;
+}
+.vert{
+    background-color: green;
+    width: 40%;
+}
+.bas{
+    background-color: orange;
+    height: 7vh;
+    margin-top: 5%;
+}
+.rouge1{
+    display: flex;
+    height: 35%;
+    padding: 5%;
+    gap: 40%;
+}
+.gris1{
+    background-color: gray;
+    border: 3px;
+    border-color: black;
+    border-style: solid;
+    width: 30%;
+}
+.gris2{
+    background-color: gray;
+    border: 3px;
+    border-color: black;
+    border-style: solid;
+    width: 30%;
+}
+.rouge2{
+    height: 35%; 
+}
+.gris3{
+    background-color: gray;
+    border: 3px;
+    border-color: black;
+    border-style: solid;
+    width: 26%;
+    height: 6.5vh;
+    position: relative;
+    margin-left: 5%;
+    margin-top: 5%;
+}
+.gris4{
+    background-color: gray;
+    border: 3px;
+    border-color: black;
+    border-style: solid;
+    width:26%;
+    height: 6.5vh;
+    position: relative;
+    margin-left: 68%;
+    margin-top: -18%;
+}

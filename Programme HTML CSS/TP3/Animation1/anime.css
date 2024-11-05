@@ -1,0 +1,46 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    background-color: black;
+    overflow: hidden;
+}
+div{
+    height: 800px;
+}
+img{
+    position: relative;
+    width: 15%;
+    height: 30vh;
+    padding: 15%;
+} 
+.message {
+    height: 3vh;
+    width: 30%;
+    position: relative;
+    left: 20%;
+    top: 64px;
+    animation: moveRotate 2s infinite;
+}
+@keyframes moveRotate {
+  
+    10%{
+        transform: translateX(50px) rotate(20deg); 
+    }
+    30%{
+        transform: translateX(100px) rotate(35deg); 
+    }
+    40%{
+        transform: translateX(200px) rotate(80deg); 
+    }
+    60%{
+        transform: translateX(300px) rotate(100deg); 
+    }
+    80% {
+        transform: translateX(400px) rotate(250deg); 
+    }
+    100% {
+        transform: translateX(650px) rotate(360deg); 
+    }
+}
