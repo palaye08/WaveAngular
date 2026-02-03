@@ -1,0 +1,143 @@
+<div class="flex">
+    <app-sidebar></app-sidebar>
+    
+    <div class="ml-64 flex-1 p-8 bg-gray-50 min-h-screen">
+      <h1 class="text-4xl font-bold text-gray-900 mb-8">🎫 Mes Réservations</h1>
+  
+      <!-- Loading -->
+      <div *ngIf="loading" class="text-center py-12">
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-gold-500 border-t-transparent"></div>
+        <p class="mt-4 text-gray-600">Chargement...</p>
+      </div>
+  
+      <!-- Liste des Réservations -->
+      <div class="grid gap-6">
+        <div *ngFor="let reservation of reservations" 
+             class="bg-white rounded-xl shadow-lg p-6 card-hover">
+          
+          <!-- Header -->
+          <div class="flex items-center justify-between mb-6 pb-4 border-b">
+            <div>
+              <p class="text-2xl font-bold text-gold-600">{{ reservation.numeroReservation }}</p>
+              <p class="text-sm text-gray-500">Créé le {{ reservation.dateCreation | date:'dd/MM/yyyy' }}</p>
+            </div>
+            <div class="text-right">
+              <span class="px-4 py-2 rounded-full text-sm font-semibold"
+                    [ngClass]="getStatutClass(reservation.statut)">
+                {{ reservation.statut }}
+              </span>
+              <p class="mt-2" [class.text-green-600]="reservation.estPaye" 
+                              [class.text-red-600]="!reservation.estPaye">
+                {{ reservation.estPaye ? '✓ Payé' : '⚠ Non payé' }}
+              </p>
+            </div>
+          </div>
+  
+          <!-- Vol Aller -->
+          <div class="mb-4">
+            <p class="text-sm text-gray-500 mb-2">Vol Aller</p>
+            <div class="flex items-center justify-between bg-gray-50 rounded-lg p-4">
+              <div class="flex items-center space-x-6">
+                <div>
+                  <p class="text-sm text-gray-500">Départ</p>
+                  <p class="text-xl font-bold">{{ reservation.volAller.villeDepart.code }}</p>
+                  <p class="text-sm text-gray-600">{{ reservation.dateDepart | date:'dd/MM/yyyy' }}</p>
+                  <p class="text-gold-600 font-semibold">{{ reservation.volAller.heureDepart }}</p>
+                </div>
+                <div class="text-center text-gray-400">
+                  <p>✈️</p>
+                  <p class="text-xs">{{ reservation.volAller.dureeVol }}min</p>
+                </div>
+                <div>
+                  <p class="text-sm text-gray-500">Arrivée</p>
+                  <p class="text-xl font-bold">{{ reservation.volAller.villeArrivee.code }}</p>
+                  <p class="text-sm text-gray-600">{{ reservation.dateDepart | date:'dd/MM/yyyy' }}</p>
+                  <p class="text-gold-600 font-semibold">{{ reservation.volAller.heureArrivee }}</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <p class="text-sm text-gray-500">Vol</p>
+                <p class="text-lg font-bold">{{ reservation.volAller.numeroVol }}</p>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Vol Retour -->
+          <div *ngIf="reservation.volRetour" class="mb-4">
+            <p class="text-sm text-gray-500 mb-2">Vol Retour</p>
+            <div class="flex items-center justify-between bg-gray-50 rounded-lg p-4">
+              <div class="flex items-center space-x-6">
+                <div>
+                  <p class="text-sm text-gray-500">Départ</p>
+                  <p class="text-xl font-bold">{{ reservation.volRetour.villeDepart.code }}</p>
+                  <p class="text-sm text-gray-600">{{ reservation.dateRetour | date:'dd/MM/yyyy' }}</p>
+                  <p class="text-gold-600 font-semibold">{{ reservation.volRetour.heureDepart }}</p>
+                </div>
+                <div class="text-center text-gray-400">
+                  <p>✈️</p>
+                  <p class="text-xs">{{ reservation.volRetour.dureeVol }}min</p>
+                </div>
+                <div>
+                  <p class="text-sm text-gray-500">Arrivée</p>
+                  <p class="text-xl font-bold">{{ reservation.volRetour.villeArrivee.code }}</p>
+                  <p class="text-sm text-gray-600">{{ reservation.dateRetour | date:'dd/MM/yyyy' }}</p>
+                  <p class="text-gold-600 font-semibold">{{ reservation.volRetour.heureArrivee }}</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <p class="text-sm text-gray-500">Vol</p>
+                <p class="text-lg font-bold">{{ reservation.volRetour.numeroVol }}</p>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Détails -->
+          <div class="grid grid-cols-3 gap-4 mb-4">
+            <div class="bg-gold-50 rounded-lg p-3 text-center">
+              <p class="text-sm text-gray-600">Classe</p>
+              <p class="text-lg font-bold text-gold-600">{{ reservation.classeVol }}</p>
+            </div>
+            <div class="bg-gold-50 rounded-lg p-3 text-center">
+              <p class="text-sm text-gray-600">Passagers</p>
+              <p class="text-lg font-bold text-gold-600">{{ reservation.nombrePassagers }}</p>
+            </div>
+            <div class="bg-gold-50 rounded-lg p-3 text-center">
+              <p class="text-sm text-gray-600">Prix Total</p>
+              <p class="text-lg font-bold text-gold-600">{{ reservation.prixTotal | number:'1.0-0' }} FCFA</p>
+            </div>
+          </div>
+  
+          <!-- Actions -->
+          <div class="flex space-x-3 pt-4 border-t">
+            <button *ngIf="!reservation.estPaye && reservation.statut !== 'ANNULEE'" 
+                    (click)="payer(reservation.id)" 
+                    class="btn-gold flex-1">
+              💳 Payer
+            </button>
+            
+            <button *ngIf="reservation.estPaye" 
+                    (click)="telechargerBillet(reservation.id)" 
+                    class="btn-gold flex-1">
+              📄 Télécharger Billet
+            </button>
+            
+            <button *ngIf="isAdmin && reservation.statut === 'EN_ATTENTE'" 
+                    (click)="confirmer(reservation.id)" 
+                    class="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600">
+              ✓ Confirmer
+            </button>
+            
+            <button *ngIf="reservation.statut !== 'ANNULEE' && reservation.statut !== 'EMBARQUEE'" 
+                    (click)="annuler(reservation.id)" 
+                    class="bg-red-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-600">
+              ✕ Annuler
+            </button>
+          </div>
+        </div>
+  
+        <div *ngIf="!loading && reservations.length === 0" class="text-center py-12 text-gray-500">
+          Aucune réservation trouvée
+        </div>
+      </div>
+    </div>
+  </div>

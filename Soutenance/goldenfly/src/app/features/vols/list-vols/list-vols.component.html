@@ -1,0 +1,116 @@
+<div class="flex">
+    <app-sidebar></app-sidebar>
+    
+    <div class="ml-64 flex-1 p-8 bg-gray-50 min-h-screen">
+      <div class="flex items-center justify-between mb-8">
+        <h1 class="text-4xl font-bold text-gray-900">✈️ Vols Disponibles</h1>
+        <button *ngIf="isAdmin" (click)="creerVol()" class="btn-gold">
+          + Créer un Vol
+        </button>
+      </div>
+  
+      <!-- Recherche -->
+      <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+        <h3 class="text-xl font-bold mb-4">Rechercher un Vol</h3>
+        <form [formGroup]="searchForm" (ngSubmit)="rechercher()">
+          <div class="grid md:grid-cols-4 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Ville de Départ</label>
+              <select formControlName="villeDepartId"
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
+                <option value="">Toutes les villes</option>
+                <option *ngFor="let ville of villes" [value]="ville.id">
+                  {{ ville.code }} - {{ ville.nom }}
+                </option>
+              </select>
+            </div>
+  
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Ville d'Arrivée</label>
+              <select formControlName="villeArriveeId"
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
+                <option value="">Toutes les villes</option>
+                <option *ngFor="let ville of villes" [value]="ville.id">
+                  {{ ville.code }} - {{ ville.nom }}
+                </option>
+              </select>
+            </div>
+  
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Date de Départ</label>
+              <input type="date" formControlName="dateDepart"
+                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
+            </div>
+  
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Passagers</label>
+              <input type="number" formControlName="nombrePassagers" min="1"
+                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
+            </div>
+          </div>
+  
+          <div class="flex space-x-4 mt-4">
+            <button type="submit" class="btn-gold">Rechercher</button>
+            <button type="button" (click)="resetSearch()" class="btn-gold-outline">Réinitialiser</button>
+          </div>
+        </form>
+      </div>
+  
+      <!-- Loading -->
+      <div *ngIf="loading" class="text-center py-12">
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-gold-500 border-t-transparent"></div>
+        <p class="mt-4 text-gray-600">Chargement des vols...</p>
+      </div>
+  
+      <!-- Liste des Vols -->
+      <div class="grid gap-6">
+        <div *ngFor="let vol of vols" 
+             class="bg-white rounded-xl shadow-lg p-6 card-hover">
+          <div class="flex items-center justify-between">
+            <div class="flex-1">
+              <div class="flex items-center space-x-4 mb-4">
+                <span class="text-3xl font-bold text-gold-600">{{ vol.numeroVol }}</span>
+                <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-semibold">
+                  {{ vol.siegesDisponibles }} sièges disponibles
+                </span>
+              </div>
+              
+              <div class="flex items-center space-x-8 text-lg">
+                <div>
+                  <p class="text-gray-500 text-sm">Départ</p>
+                  <p class="font-bold">{{ vol.villeDepart.code }}</p>
+                  <p class="text-gray-600">{{ vol.villeDepart.nom }}</p>
+                  <p class="text-gold-600 font-semibold">{{ vol.heureDepart }}</p>
+                </div>
+                
+                <div class="flex-1 text-center">
+                  <p class="text-gray-400">✈️</p>
+                  <p class="text-sm text-gray-500">{{ vol.dureeVol }} min</p>
+                </div>
+                
+                <div>
+                  <p class="text-gray-500 text-sm">Arrivée</p>
+                  <p class="font-bold">{{ vol.villeArrivee.code }}</p>
+                  <p class="text-gray-600">{{ vol.villeArrivee.nom }}</p>
+                  <p class="text-gold-600 font-semibold">{{ vol.heureArrivee }}</p>
+                </div>
+              </div>
+            </div>
+  
+            <div class="text-right ml-8">
+              <p class="text-gray-500 text-sm">À partir de</p>
+              <p class="text-4xl font-bold text-gold-600">{{ vol.prixBase | number:'1.0-0' }}</p>
+              <p class="text-gray-500 text-sm mb-4">FCFA</p>
+              <button (click)="reserver(vol)" class="btn-gold">
+                Réserver
+              </button>
+            </div>
+          </div>
+        </div>
+  
+        <div *ngIf="!loading && vols.length === 0" class="text-center py-12 text-gray-500">
+          Aucun vol trouvé
+        </div>
+      </div>
+    </div>
+  </div>

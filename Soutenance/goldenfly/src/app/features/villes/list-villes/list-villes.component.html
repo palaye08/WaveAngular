@@ -1,0 +1,129 @@
+<div class="flex">
+    <app-sidebar></app-sidebar>
+    
+    <div class="ml-64 flex-1 p-8 bg-gray-50 min-h-screen">
+      <div class="flex items-center justify-between mb-8">
+        <h1 class="text-4xl font-bold text-gray-900">🏙️ Gestion Villes & Aéroports</h1>
+        <button (click)="openModal()" class="btn-gold">
+          + Ajouter Ville
+        </button>
+      </div>
+  
+      <!-- Recherche -->
+      <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+        <input type="text" [(ngModel)]="searchTerm" (input)="filterVilles()"
+               placeholder="Rechercher par nom, code ou pays..."
+               class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
+      </div>
+  
+      <!-- Loading -->
+      <div *ngIf="loading && !showModal" class="text-center py-12">
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-gold-500 border-t-transparent"></div>
+      </div>
+  
+      <!-- Grid Villes -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngFor="let ville of filteredVilles" 
+             class="bg-white rounded-xl shadow-lg p-6 card-hover">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <h3 class="text-2xl font-bold text-gold-600">{{ ville.code }}</h3>
+              <p class="text-xl font-semibold text-gray-900">{{ ville.nom }}</p>
+              <p class="text-sm text-gray-500">{{ ville.pays }}</p>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold"
+                  [class.bg-green-100]="ville.actif"
+                  [class.text-green-700]="ville.actif"
+                  [class.bg-red-100]="!ville.actif"
+                  [class.text-red-700]="!ville.actif">
+              {{ ville.actif ? 'Actif' : 'Inactif' }}
+            </span>
+          </div>
+  
+          <div class="space-y-2 mb-4">
+            <div class="flex items-center text-sm text-gray-600">
+              <span class="mr-2">✈️</span>
+              <span>{{ ville.nomAeroport }}</span>
+            </div>
+            <div *ngIf="ville.latitude && ville.longitude" class="flex items-center text-sm text-gray-600">
+              <span class="mr-2">📍</span>
+              <span>{{ ville.latitude }}, {{ ville.longitude }}</span>
+            </div>
+          </div>
+  
+          <div class="flex space-x-2 pt-4 border-t">
+            <button (click)="openModal(ville)" 
+                    class="flex-1 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+              ✏️ Modifier
+            </button>
+            <button (click)="deleteVille(ville.id)" 
+                    class="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors">
+              🗑️ Supprimer
+            </button>
+          </div>
+        </div>
+      </div>
+  
+      <div *ngIf="!loading && filteredVilles.length === 0" class="text-center py-12 text-gray-500">
+        Aucune ville trouvée
+      </div>
+  
+      <!-- Modal -->
+      <div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-2xl w-full">
+          <h2 class="text-2xl font-bold mb-6">{{ editMode ? 'Modifier' : 'Ajouter' }} une Ville</h2>
+          
+          <form [formGroup]="villeForm" (ngSubmit)="onSubmit()">
+            <div class="grid md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-gray-700 font-semibold mb-2">Nom *</label>
+                <input type="text" formControlName="nom"
+                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
+              </div>
+  
+              <div>
+                <label class="block text-gray-700 font-semibold mb-2">Code (3 lettres) *</label>
+                <input type="text" formControlName="code" maxlength="3"
+                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none uppercase">
+              </div>
+  
+              <div class="md:col-span-2">
+                <label class="block text-gray-700 font-semibold mb-2">Nom Aéroport *</label>
+                <input type="text" formControlName="nomAeroport"
+                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
+              </div>
+  
+              <div class="md:col-span-2">
+                <label class="block text-gray-700 font-semibold mb-2">Pays *</label>
+                <input type="text" formControlName="pays"
+                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
+              </div>
+  
+              <div>
+                <label class="block text-gray-700 font-semibold mb-2">Latitude</label>
+                <input type="number" step="0.0001" formControlName="latitude"
+                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
+              </div>
+  
+              <div>
+                <label class="block text-gray-700 font-semibold mb-2">Longitude</label>
+                <input type="number" step="0.0001" formControlName="longitude"
+                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
+              </div>
+            </div>
+  
+            <div class="flex space-x-4 mt-6">
+              <button type="submit" [disabled]="villeForm.invalid || loading"
+                      class="flex-1 btn-gold disabled:opacity-50">
+                {{ loading ? 'Enregistrement...' : 'Enregistrer' }}
+              </button>
+              <button type="button" (click)="closeModal()"
+                      class="flex-1 btn-gold-outline">
+                Annuler
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,94 @@
+<div class="flex">
+    <app-sidebar></app-sidebar>
+    
+    <div class="ml-64 flex-1 p-8 bg-gray-50 min-h-screen">
+      <h1 class="text-4xl font-bold text-gray-900 mb-8">💳 Paiements</h1>
+  
+      <!-- Formulaire de Paiement -->
+      <div *ngIf="showPaiementForm && reservationSelectionnee" class="bg-white rounded-xl shadow-lg p-8 mb-8">
+        <h2 class="text-2xl font-bold mb-6">Effectuer un Paiement</h2>
+        
+        <!-- Info Réservation -->
+        <div class="bg-gradient-to-r from-gold-500 to-gold-600 rounded-xl p-6 text-white mb-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-lg font-medium">Réservation {{ reservationSelectionnee.numeroReservation }}</p>
+              <p class="text-sm text-gold-100">
+                {{ reservationSelectionnee.volAller.villeDepart.nom }} → 
+                {{ reservationSelectionnee.volAller.villeArrivee.nom }}
+              </p>
+            </div>
+            <p class="text-4xl font-bold">{{ reservationSelectionnee.prixTotal | number:'1.0-0' }} FCFA</p>
+          </div>
+        </div>
+  
+        <!-- Formulaire --> 
+        <form [formGroup]="paiementForm" (ngSubmit)="initierPaiement()">
+          <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <!-- Mode de Paiement -->
+            <div class="md:col-span-2">
+              <label class="block text-gray-700 font-semibold mb-3">Mode de Paiement</label>
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <label *ngFor="let mode of modesPaiement" 
+                       class="flex flex-col items-center p-4 border-2 rounded-lg cursor-pointer transition-all"
+                       [class.border-gold-500]="paiementForm.get('modePaiement')?.value === mode"
+                       [class.bg-gold-50]="paiementForm.get('modePaiement')?.value === mode">
+                  <input type="radio" formControlName="modePaiement" [value]="mode" class="hidden">
+                  <span class="text-4xl mb-2">{{ getModePaiementIcon(mode) }}</span>
+                  <span class="text-sm font-medium text-center">{{ mode }}</span>
+                </label>
+              </div>
+            </div>
+  
+            <!-- Numéro de Téléphone -->
+            <div class="md:col-span-2" 
+                 *ngIf="paiementForm.get('modePaiement')?.value === 'WAVE' || 
+                        paiementForm.get('modePaiement')?.value === 'ORANGE_MONEY'">
+              <label class="block text-gray-700 font-semibold mb-2">Numéro de Téléphone</label>
+              <input type="tel" formControlName="numeroTelephone" 
+                     placeholder="+221771234567"
+                     class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
+              <div *ngIf="paiementForm.get('numeroTelephone')?.invalid && paiementForm.get('numeroTelephone')?.touched" 
+                   class="text-red-500 text-sm mt-1">
+                Numéro de téléphone invalide
+              </div>
+            </div>
+          </div>
+  
+          <button type="submit" [disabled]="paiementForm.invalid || loading"
+                  class="w-full btn-gold text-lg py-4 disabled:opacity-50">
+            <span *ngIf="!loading">Procéder au Paiement</span>
+            <span *ngIf="loading">Traitement...</span>
+          </button>
+        </form>
+      </div>
+  
+      <!-- Liste des Paiements (Admin) -->
+      <div *ngIf="isAdmin && paiements.length > 0">
+        <h2 class="text-2xl font-bold mb-6">Historique des Paiements</h2>
+        
+        <div class="grid gap-4">
+          <div *ngFor="let paiement of paiements" 
+               class="bg-white rounded-xl shadow-lg p-6">
+            <div class="flex items-center justify-between">
+              <div class="flex-1">
+                <p class="text-lg font-bold text-gold-600">{{ paiement.numeroPaiement }}</p>
+                <p class="text-sm text-gray-500">Réservation: {{ paiement.numeroReservation }}</p>
+                <p class="text-sm text-gray-600 mt-2">
+                  {{ getModePaiementIcon(paiement.modePaiement) }} {{ paiement.modePaiement }}
+                </p>
+              </div>
+              
+              <div class="text-right">
+                <p class="text-2xl font-bold text-gold-600">{{ paiement.montant | number:'1.0-0' }} FCFA</p>
+                <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold mt-2"
+                      [ngClass]="getStatutClass(paiement.statut)">
+                  {{ paiement.statut }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

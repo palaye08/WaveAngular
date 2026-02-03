@@ -1,0 +1,77 @@
+<aside class="fixed left-0 top-0 h-screen w-64 bg-gradient-to-b from-gold-500 to-gold-600 shadow-2xl z-50">
+    <!-- Logo -->
+    <div class="flex items-center justify-center h-20 border-b border-gold-400">
+      <h1 class="text-3xl font-bold text-white">✈️ GoldenFly</h1>
+    </div>
+  
+    <!-- User Info -->
+    <div class="p-4 border-b border-gold-400">
+      <div class="flex items-center space-x-3">
+        <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-gold-600 font-bold text-xl">
+          {{ currentUser?.prenom?.charAt(0) }}{{ currentUser?.nom?.charAt(0) }}
+        </div>
+        <div class="text-white">
+          <p class="font-semibold">{{ currentUser?.prenom }} {{ currentUser?.nom }}</p>
+          <p class="text-sm text-gold-100">{{ currentUser?.profile }}</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Navigation -->
+    <nav class="flex-1 p-4 space-y-2">
+      <!-- Admin Menu -->
+      <div *ngIf="isAdmin">
+        <a routerLink="/dashboard" routerLinkActive="bg-white text-gold-600" 
+           class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white hover:text-gold-600 text-white transition-all">
+          <span>📊</span>
+          <span class="font-medium">Dashboard</span>
+        </a>
+        
+        <a routerLink="/utilisateurs" routerLinkActive="bg-white text-gold-600"
+           class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white hover:text-gold-600 text-white transition-all">
+          <span>👥</span>
+          <span class="font-medium">Utilisateurs</span>
+        </a>
+        
+        <a routerLink="/villes" routerLinkActive="bg-white text-gold-600"
+           class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white hover:text-gold-600 text-white transition-all">
+          <span>🏙️</span>
+          <span class="font-medium">Villes</span>
+        </a>
+      </div>
+  
+      <!-- Common Menu -->
+      <a routerLink="/vols" routerLinkActive="bg-white text-gold-600"
+         class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white hover:text-gold-600 text-white transition-all">
+        <span>✈️</span>
+        <span class="font-medium">Vols</span>
+      </a>
+      
+      <a routerLink="/reservations" routerLinkActive="bg-white text-gold-600"
+         class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white hover:text-gold-600 text-white transition-all">
+        <span>🎫</span>
+        <span class="font-medium">Réservations</span>
+      </a>
+      
+      <a routerLink="/paiements" routerLinkActive="bg-white text-gold-600"
+         class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white hover:text-gold-600 text-white transition-all">
+        <span>💳</span>
+        <span class="font-medium">Paiements</span>
+      </a>
+      
+      <a routerLink="/compte" routerLinkActive="bg-white text-gold-600"
+         class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-white hover:text-gold-600 text-white transition-all">
+        <span>👤</span>
+        <span class="font-medium">Mon Compte</span>
+      </a>
+    </nav>
+  
+    <!-- Logout Button -->
+    <div class="p-4 border-t border-gold-400">
+      <button (click)="logout()" 
+              class="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-all">
+        <span>🚪</span>
+        <span class="font-medium">Déconnexion</span>
+      </button>
+    </div>
+  </aside>
