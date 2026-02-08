@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: goldenfly-front
+    env: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist/goldenfly/browser
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
