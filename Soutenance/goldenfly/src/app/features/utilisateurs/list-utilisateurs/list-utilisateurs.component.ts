@@ -144,3 +144,5 @@ export class ListUtilisateursComponent implements OnInit {
       : 'bg-blue-100 text-blue-700';
   }
 }
+
+// le html 

@@ -14,7 +14,9 @@ export class PaiementService {
   getPaiements(): Observable<Paiement[]> {
     return this.http.get<Paiement[]>(this.baseUrl);
   }
-
+  getPaiementsByUserId(utilisateurId: number): Observable<Paiement[]> {
+    return this.http.get<Paiement[]>(`${this.baseUrl}/utilisateur/${utilisateurId}`);
+  }
   getStatutPaiement(reservationId: number): Observable<Paiement> {
     return this.http.get<Paiement>(`${this.baseUrl}/reservation/${reservationId}`);
   }

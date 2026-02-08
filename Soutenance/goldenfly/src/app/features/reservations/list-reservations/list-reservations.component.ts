@@ -10,7 +10,8 @@ import { Reservation } from '../../../core/models/reservation.model';
   selector: 'app-list-reservations',
   standalone: true,
   imports: [CommonModule, SidebarComponent],
-  templateUrl: './list-reservations.component.html'
+  templateUrl: './list-reservations.component.html',
+  styleUrls: ['./list-reservations.component.css']
 })
 export class ListReservationsComponent implements OnInit {
   private reservationService = inject(ReservationService);
@@ -20,6 +21,16 @@ export class ListReservationsComponent implements OnInit {
   reservations: Reservation[] = [];
   loading = false;
   isAdmin = false;
+
+  // Modals
+  showConfirmModal = false;
+  showCancelModal = false;
+  showSuccessModal = false;
+  showErrorModal = false;
+  
+  modalMessage = '';
+  selectedReservationId?: number;
+  actionType: 'confirm' | 'cancel' | '' = '';
 
   ngOnInit() {
     this.isAdmin = this.authService.isAdmin();
@@ -51,36 +62,85 @@ export class ListReservationsComponent implements OnInit {
     }
   }
 
-  confirmer(id: number) {
-    if (confirm('Confirmer cette réservation ?')) {
-      this.reservationService.confirmerReservation(id).subscribe({
-        next: () => {
-          alert('Réservation confirmée avec succès !');
-          this.loadReservations();
-        },
-        error: (err) => alert('Erreur: ' + err.error?.message)
-      });
-    }
+  openConfirmModal(id: number) {
+    this.selectedReservationId = id;
+    this.actionType = 'confirm';
+    this.showConfirmModal = true;
   }
 
-  annuler(id: number) {
-    if (confirm('Annuler cette réservation ?')) {
-      this.reservationService.annulerReservation(id).subscribe({
-        next: () => {
-          alert('Réservation annulée avec succès !');
-          this.loadReservations();
-        },
-        error: (err) => alert('Erreur: ' + err.error?.message)
-      });
-    }
+  openCancelModal(id: number) {
+    this.selectedReservationId = id;
+    this.actionType = 'cancel';
+    this.showCancelModal = true;
   }
 
-  telechargerBillet(id: number) {
+  closeConfirmModal() {
+    this.showConfirmModal = false;
+    this.selectedReservationId = undefined;
+    this.actionType = '';
+  }
+
+  closeCancelModal() {
+    this.showCancelModal = false;
+    this.selectedReservationId = undefined;
+    this.actionType = '';
+  }
+
+  confirmer() {
+    if (!this.selectedReservationId) return;
+    
+    this.loading = true;
+    this.reservationService.confirmerReservation(this.selectedReservationId).subscribe({
+      next: () => {
+        this.loading = false;
+        this.closeConfirmModal();
+        this.modalMessage = 'Réservation confirmée avec succès !';
+        this.showSuccessModal = true;
+        this.loadReservations();
+        
+        setTimeout(() => {
+          this.showSuccessModal = false;
+        }, 3000);
+      },
+      error: (err) => {
+        this.loading = false;
+        this.closeConfirmModal();
+        this.modalMessage = err.error?.message || 'Erreur lors de la confirmation';
+        this.showErrorModal = true;
+      }
+    });
+  }
+
+  annuler() {
+    if (!this.selectedReservationId) return;
+    
+    this.loading = true;
+    this.reservationService.annulerReservation(this.selectedReservationId).subscribe({
+      next: () => {
+        this.loading = false;
+        this.closeCancelModal();
+        this.modalMessage = 'Réservation annulée avec succès !';
+        this.showSuccessModal = true;
+        this.loadReservations();
+        
+        setTimeout(() => {
+          this.showSuccessModal = false;
+        }, 3000);
+      },
+      error: (err) => {
+        this.loading = false;
+        this.closeCancelModal();
+        this.modalMessage = err.error?.message || 'Erreur lors de l\'annulation';
+        this.showErrorModal = true;
+      }
+    });
+  }
+
+   telechargerBillet(id: number) {
     this.reservationService.getBillet(id).subscribe({
       next: (billet) => {
-        // Implémenter le téléchargement PDF ici
+        // La logique de téléchargement sera implémentée ailleurs
         console.log('Billet:', billet);
-        alert('Fonctionnalité de téléchargement à venir');
       }
     });
   }
@@ -89,6 +149,16 @@ export class ListReservationsComponent implements OnInit {
     this.router.navigate(['/paiements'], {
       queryParams: { reservationId }
     });
+  }
+
+  closeSuccessModal() {
+    this.showSuccessModal = false;
+    this.modalMessage = '';
+  }
+
+  closeErrorModal() {
+    this.showErrorModal = false;
+    this.modalMessage = '';
   }
 
   getStatutClass(statut: string): string {

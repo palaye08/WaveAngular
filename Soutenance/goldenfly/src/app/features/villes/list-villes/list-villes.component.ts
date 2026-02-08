@@ -8,8 +8,9 @@ import { Ville } from '../../../core/models/ville.model';
 @Component({
   selector: 'app-list-villes',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule,SidebarComponent],
-  templateUrl: './list-villes.component.html'
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, SidebarComponent],
+  templateUrl: './list-villes.component.html',
+  styleUrls: ['./list-villes.component.css']
 })
 export class ListVillesComponent implements OnInit {
   private villeService = inject(VilleService);
@@ -17,13 +18,27 @@ export class ListVillesComponent implements OnInit {
 
   villes: Ville[] = [];
   filteredVilles: Ville[] = [];
+  paginatedVilles: Ville[] = [];
+  
   loading = false;
   showModal = false;
+  showDeleteModal = false;
+  showSuccessModal = false;
+  showErrorModal = false;
+  
   editMode = false;
   selectedVilleId?: number;
+  selectedVille?: Ville;
+  modalMessage = '';
   
   villeForm!: FormGroup;
   searchTerm = '';
+
+  // Pagination
+  currentPage = 1;
+  itemsPerPage = 3;
+  totalPages = 0;
+  pages: number[] = [];
 
   ngOnInit() {
     this.initForm();
@@ -47,10 +62,44 @@ export class ListVillesComponent implements OnInit {
       next: (villes) => {
         this.villes = villes;
         this.filteredVilles = villes;
+        this.updatePagination();
         this.loading = false;
       },
       error: () => this.loading = false
     });
+  }
+
+  updatePagination() {
+    this.totalPages = Math.ceil(this.filteredVilles.length / this.itemsPerPage);
+    this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+    this.updatePaginatedVilles();
+  }
+
+  updatePaginatedVilles() {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedVilles = this.filteredVilles.slice(startIndex, endIndex);
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.updatePaginatedVilles();
+    }
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updatePaginatedVilles();
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.updatePaginatedVilles();
+    }
   }
 
   openModal(ville?: Ville) {
@@ -71,6 +120,16 @@ export class ListVillesComponent implements OnInit {
     this.villeForm.reset();
   }
 
+  openDeleteModal(ville: Ville) {
+    this.selectedVille = ville;
+    this.showDeleteModal = true;
+  }
+
+  closeDeleteModal() {
+    this.showDeleteModal = false;
+    this.selectedVille = undefined;
+  }
+
   onSubmit() {
     if (this.villeForm.valid) {
       this.loading = true;
@@ -86,26 +145,45 @@ export class ListVillesComponent implements OnInit {
           this.loading = false;
           this.closeModal();
           this.loadVilles();
-          alert(this.editMode ? 'Ville modifiée !' : 'Ville créée !');
+          this.modalMessage = this.editMode ? 'Ville modifiée avec succès !' : 'Ville créée avec succès !';
+          this.showSuccessModal = true;
+          
+          setTimeout(() => {
+            this.showSuccessModal = false;
+          }, 3000);
         },
         error: (err) => {
           this.loading = false;
-          alert('Erreur: ' + (err.error?.message || 'Opération échouée'));
+          this.modalMessage = err.error?.message || 'Erreur lors de l\'opération';
+          this.showErrorModal = true;
         }
       });
     }
   }
 
-  deleteVille(id: number) {
-    if (confirm('Voulez-vous vraiment supprimer cette ville ?')) {
-      this.villeService.deleteVille(id).subscribe({
-        next: () => {
-          alert('Ville supprimée !');
-          this.loadVilles();
-        },
-        error: (err) => alert('Erreur: ' + err.error?.message)
-      });
-    }
+  deleteVille() {
+    if (!this.selectedVille) return;
+
+    this.loading = true;
+    this.villeService.deleteVille(this.selectedVille.id).subscribe({
+      next: () => {
+        this.loading = false;
+        this.closeDeleteModal();
+        this.modalMessage = `Ville ${this.selectedVille?.nom} supprimée avec succès !`;
+        this.showSuccessModal = true;
+        this.loadVilles();
+        
+        setTimeout(() => {
+          this.showSuccessModal = false;
+        }, 3000);
+      },
+      error: (err) => {
+        this.loading = false;
+        this.closeDeleteModal();
+        this.modalMessage = err.error?.message || 'Erreur lors de la suppression';
+        this.showErrorModal = true;
+      }
+    });
   }
 
   filterVilles() {
@@ -119,5 +197,17 @@ export class ListVillesComponent implements OnInit {
     } else {
       this.filteredVilles = this.villes;
     }
+    this.currentPage = 1;
+    this.updatePagination();
+  }
+
+  closeSuccessModal() {
+    this.showSuccessModal = false;
+    this.modalMessage = '';
+  }
+
+  closeErrorModal() {
+    this.showErrorModal = false;
+    this.modalMessage = '';
   }
 }

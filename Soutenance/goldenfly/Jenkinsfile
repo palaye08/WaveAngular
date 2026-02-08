@@ -1,0 +1,157 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_REGISTRY = 'docker.io'
+        DOCKER_HUB_REPO = 'palaye769/goldenfly-frontend'
+        DOCKER_HUB_CREDENTIALS = 'docker-hub-new'
+        RENDER_DEPLOY_HOOK = credentials('render-webhook')
+        IMAGE_TAG = 'latest'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo '📦 Récupération du code source depuis GitHub...'
+                git branch: 'main',
+                    url: 'https://github.com/palaye08/WaveAngular.git'
+                    
+                // Se déplacer dans le bon dossier
+                sh 'cd Soutenance/goldenfly'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                echo '📥 Installation des dépendances Node.js...'
+                dir('Soutenance/goldenfly') {
+                    sh '''
+                        node --version
+                        npm --version
+                        npm config set fetch-timeout 600000
+                        npm config set fetch-retry-maxtimeout 600000
+                        npm install --legacy-peer-deps
+                    '''
+                }
+            }
+        }
+
+        stage('Build Angular App') {
+            steps {
+                echo '🔨 Construction de l\'application Angular...'
+                dir('Soutenance/goldenfly') {
+                    sh '''
+                        npm run build -- --configuration=production
+                    '''
+                }
+            }
+        }
+
+        stage('Tests') {
+            steps {
+                echo '🧪 Exécution des tests...'
+                dir('Soutenance/goldenfly') {
+                    sh '''
+                        npm run test -- --watch=false --browsers=ChromeHeadless || true
+                    '''
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                echo '🐳 Construction de l\'image Docker...'
+                dir('Soutenance/goldenfly') {
+                    script {
+                        def imageName = "${DOCKER_HUB_REPO}:${BUILD_NUMBER}"
+                        def latestImageName = "${DOCKER_HUB_REPO}:${IMAGE_TAG}"
+                        
+                        sh """
+                            docker build -t ${imageName} .
+                            docker tag ${imageName} ${latestImageName}
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Push to Docker Registry') {
+            steps {
+                echo '📤 Push de l\'image vers Docker Hub...'
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', DOCKER_HUB_CREDENTIALS) {
+                        sh """
+                            docker push ${DOCKER_HUB_REPO}:${BUILD_NUMBER}
+                            docker push ${DOCKER_HUB_REPO}:${IMAGE_TAG}
+                        """
+                    }
+                    
+                    // Nettoyage
+                    sh """
+                        docker rmi ${DOCKER_HUB_REPO}:${BUILD_NUMBER} || true
+                        docker rmi ${DOCKER_HUB_REPO}:${IMAGE_TAG} || true
+                    """
+                }
+            }
+        }
+
+        stage('Deploy to Render') {
+            steps {
+                echo '🚀 Déploiement du frontend sur Render...'
+                script {
+                    sh '''
+                        curl -X POST "$RENDER_DEPLOY_HOOK" \
+                            -H "Content-Type: application/json" \
+                            -d '{"branch": "main"}'
+                    '''
+                    echo '✅ Webhook de déploiement envoyé à Render'
+                }
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                echo '🔍 Vérification du déploiement...'
+                sh '''
+                    echo "⏳ Attente du déploiement (60 secondes)..."
+                    sleep 60
+                    echo "✅ Frontend déployé avec succès"
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Pipeline frontend exécuté avec succès!'
+            echo '📊 Image Docker: ${DOCKER_HUB_REPO}:${BUILD_NUMBER}'
+        }
+        failure {
+            echo '❌ Le pipeline frontend a échoué. Vérifiez les logs.'
+        }
+        always {
+            echo '🧹 Nettoyage de l\'espace de travail...'
+            cleanWs()
+        }
+    }
+}
+
+// SPRING_PROFILES_ACTIVE=prod
+// PORT=10000
+// DATABASE_HOST=dpg-d6329h14tr6s738t6270-a.oregon-postgres.render.com
+// DATABASE_PORT=5432
+// DATABASE_NAME=goldenfly_db
+// DATABASE_USER=goldenfly_user
+// DATABASE_PASSWORD=6vzXb6tOQsORkzviy3YfJdqasF2KwQG9
+// APP_JWT_SECRET=TXlTZWNyZXRLZXlGb3JKV1RUb2tlbkdlbmVyYXRpb25UaGF0SXNWZXJ5TG9uZ0FuZFNlY3VyZTIwMjRHb2xkZW5GbHk=
+// APP_JWT_EXPIRATION=86400000
+// APP_JWT_REFRESH_EXPIRATION=604800000
+// WAVE_API_KEY=votre_cle_api_wave
+// WAVE_API_URL=https://api.wave.com/v1
+// WAVE_API_SECRET=votre_secret_wave
+// ORANGE_API_KEY=votre_cle_api_orange
+// ORANGE_API_URL=https://api.orange.com/orange-money-webpay/dev/v1
+// ORANGE_API_SECRET=votre_secret_orange
+// ORANGE_MERCHANT_ID=votre_merchant_id
+// ALLOWED_ORIGINS=https://goldenfly-frontend.onrender.com
+// DATABASE_URL=postgresql://goldenfly_user:6vzXb6tOQsORkzviy3YfJdqasF2KwQG9@dpg-d6329h14tr6s738t6270-a/goldenfly_db

@@ -10,8 +10,9 @@ import { Ville } from '../../../core/models/ville.model';
 @Component({
   selector: 'app-create-vol',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule,SidebarComponent],
-  templateUrl: './create-vol.component.html'
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, SidebarComponent],
+  templateUrl: './create-vol.component.html',
+  styleUrls: ['./create-vol.component.css']
 })
 export class CreateVolComponent implements OnInit {
   private fb = inject(FormBuilder);
@@ -22,14 +23,22 @@ export class CreateVolComponent implements OnInit {
   volForm!: FormGroup;
   villes: Ville[] = [];
   loading = false;
+  
+  // Modals
+  showCancelModal = false;
+  showSuccessModal = false;
+  showErrorModal = false;
+  showValidationModal = false;
+  modalMessage = '';
+  
   jours = [
-    { name: 'Lundi', key: 'lundi' },
-    { name: 'Mardi', key: 'mardi' },
-    { name: 'Mercredi', key: 'mercredi' },
-    { name: 'Jeudi', key: 'jeudi' },
-    { name: 'Vendredi', key: 'vendredi' },
-    { name: 'Samedi', key: 'samedi' },
-    { name: 'Dimanche', key: 'dimanche' }
+    { name: 'Lundi', key: 'lundi', icon: '📅' },
+    { name: 'Mardi', key: 'mardi', icon: '📅' },
+    { name: 'Mercredi', key: 'mercredi', icon: '📅' },
+    { name: 'Jeudi', key: 'jeudi', icon: '📅' },
+    { name: 'Vendredi', key: 'vendredi', icon: '📅' },
+    { name: 'Samedi', key: 'samedi', icon: '📅' },
+    { name: 'Dimanche', key: 'dimanche', icon: '📅' }
   ];
 
   ngOnInit() {
@@ -70,7 +79,8 @@ export class CreateVolComponent implements OnInit {
       // Vérifier qu'au moins un jour est sélectionné
       const joursSelectionnes = this.jours.some(j => this.volForm.get(j.key)?.value);
       if (!joursSelectionnes) {
-        alert('Veuillez sélectionner au moins un jour de disponibilité');
+        this.modalMessage = 'Veuillez sélectionner au moins un jour de disponibilité';
+        this.showValidationModal = true;
         return;
       }
 
@@ -78,12 +88,17 @@ export class CreateVolComponent implements OnInit {
       this.volService.createVol(this.volForm.value).subscribe({
         next: () => {
           this.loading = false;
-          alert('Vol créé avec succès !');
-          this.router.navigate(['/vols']);
+          this.modalMessage = 'Vol créé avec succès !';
+          this.showSuccessModal = true;
+          
+          setTimeout(() => {
+            this.router.navigate(['/vols']);
+          }, 2000);
         },
         error: (err) => {
           this.loading = false;
-          alert('Erreur: ' + (err.error?.message || 'Création échouée'));
+          this.modalMessage = err.error?.message || 'Erreur lors de la création du vol';
+          this.showErrorModal = true;
         }
       });
     }
@@ -98,9 +113,36 @@ export class CreateVolComponent implements OnInit {
       const [hA, mA] = heureArrivee.split(':').map(Number);
       
       let duree = (hA * 60 + mA) - (hD * 60 + mD);
-      if (duree < 0) duree += 24 * 60; // Si l'arrivée est le lendemain
+      if (duree < 0) duree += 24 * 60;
       
       this.volForm.patchValue({ dureeVol: duree });
     }
+  }
+
+  openCancelModal() {
+    this.showCancelModal = true;
+  }
+
+  closeCancelModal() {
+    this.showCancelModal = false;
+  }
+
+  confirmCancel() {
+    this.router.navigate(['/vols']);
+  }
+
+  closeSuccessModal() {
+    this.showSuccessModal = false;
+    this.router.navigate(['/vols']);
+  }
+
+  closeErrorModal() {
+    this.showErrorModal = false;
+    this.modalMessage = '';
+  }
+
+  closeValidationModal() {
+    this.showValidationModal = false;
+    this.modalMessage = '';
   }
 }

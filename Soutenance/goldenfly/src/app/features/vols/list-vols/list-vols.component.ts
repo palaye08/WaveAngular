@@ -14,7 +14,8 @@ import { TypeReservationEnum } from '../../../core/models/reservation.model';
   selector: 'app-list-vols',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, SidebarComponent],
-  templateUrl: './list-vols.component.html'
+  templateUrl: './list-vols.component.html',
+  styleUrls: ['./list-vols.component.css']
 })
 export class ListVolsComponent implements OnInit {
   private volService = inject(VolService);
@@ -24,10 +25,25 @@ export class ListVolsComponent implements OnInit {
   private fb = inject(FormBuilder);
 
   vols: Vol[] = [];
+  paginatedVols: Vol[] = [];
   villes: Ville[] = [];
   searchForm!: FormGroup;
   loading = false;
   isAdmin = false;
+
+  // Pagination
+  currentPage = 1;
+  itemsPerPage = 2;
+  totalPages = 0;
+  pages: number[] = [];
+
+  // Modals
+  showDeleteModal = false;
+  showSuccessModal = false;
+  showErrorModal = false;
+  modalMessage = '';
+  selectedVolId?: number;
+  selectedVolNumero?: string;
 
   ngOnInit() {
     this.isAdmin = this.authService.isAdmin();
@@ -56,10 +72,47 @@ export class ListVolsComponent implements OnInit {
     this.volService.getVols().subscribe({
       next: (vols) => {
         this.vols = vols;
+        this.updatePagination();
         this.loading = false;
       },
       error: () => this.loading = false
     });
+  }
+
+  updatePagination() {
+    this.totalPages = Math.ceil(this.vols.length / this.itemsPerPage);
+    this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+    this.updatePaginatedVols();
+  }
+
+  updatePaginatedVols() {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedVols = this.vols.slice(startIndex, endIndex);
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.updatePaginatedVols();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updatePaginatedVols();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.updatePaginatedVols();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 
   rechercher() {
@@ -72,6 +125,8 @@ export class ListVolsComponent implements OnInit {
     this.volService.rechercherVols(searchCriteria).subscribe({
       next: (vols) => {
         this.vols = vols;
+        this.currentPage = 1;
+        this.updatePagination();
         this.loading = false;
       },
       error: () => this.loading = false
@@ -89,5 +144,56 @@ export class ListVolsComponent implements OnInit {
 
   creerVol() {
     this.router.navigate(['/vols/create']);
+  }
+
+  openDeleteModal(vol: Vol) {
+    this.selectedVolId = vol.id;
+    this.selectedVolNumero = vol.numeroVol;
+    this.showDeleteModal = true;
+  }
+
+  closeDeleteModal() {
+    this.showDeleteModal = false;
+    this.selectedVolId = undefined;
+    this.selectedVolNumero = undefined;
+  }
+
+  deleteVol() {
+    if (!this.selectedVolId) return;
+
+    this.loading = true;
+    this.volService.deleteVol(this.selectedVolId).subscribe({
+      next: () => {
+        this.loading = false;
+        this.closeDeleteModal();
+        this.modalMessage = `Vol ${this.selectedVolNumero} supprimé avec succès !`;
+        this.showSuccessModal = true;
+        this.loadVols();
+
+        setTimeout(() => {
+          this.showSuccessModal = false;
+        }, 3000);
+      },
+      error: (err) => {
+        this.loading = false;
+        this.closeDeleteModal();
+        this.modalMessage = err.error?.message || 'Erreur lors de la suppression du vol';
+        this.showErrorModal = true;
+      }
+    });
+  }
+
+  closeSuccessModal() {
+    this.showSuccessModal = false;
+    this.modalMessage = '';
+  }
+
+  closeErrorModal() {
+    this.showErrorModal = false;
+    this.modalMessage = '';
+  }
+
+  hasReservations(vol: Vol): boolean {
+    return (vol as any).hasReservations || false;
   }
 }

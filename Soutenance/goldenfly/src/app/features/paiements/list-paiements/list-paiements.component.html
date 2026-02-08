@@ -1,94 +1,460 @@
 <div class="flex">
-    <app-sidebar></app-sidebar>
-    
-    <div class="ml-64 flex-1 p-8 bg-gray-50 min-h-screen">
-      <h1 class="text-4xl font-bold text-gray-900 mb-8">💳 Paiements</h1>
+  <app-sidebar></app-sidebar>
   
-      <!-- Formulaire de Paiement -->
-      <div *ngIf="showPaiementForm && reservationSelectionnee" class="bg-white rounded-xl shadow-lg p-8 mb-8">
-        <h2 class="text-2xl font-bold mb-6">Effectuer un Paiement</h2>
-        
-        <!-- Info Réservation -->
-        <div class="bg-gradient-to-r from-gold-500 to-gold-600 rounded-xl p-6 text-white mb-6">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-lg font-medium">Réservation {{ reservationSelectionnee.numeroReservation }}</p>
-              <p class="text-sm text-gold-100">
-                {{ reservationSelectionnee.volAller.villeDepart.nom }} → 
-                {{ reservationSelectionnee.volAller.villeArrivee.nom }}
-              </p>
-            </div>
-            <p class="text-4xl font-bold">{{ reservationSelectionnee.prixTotal | number:'1.0-0' }} FCFA</p>
-          </div>
-        </div>
-  
-        <!-- Formulaire --> 
-        <form [formGroup]="paiementForm" (ngSubmit)="initierPaiement()">
-          <div class="grid md:grid-cols-2 gap-6 mb-6">
-            <!-- Mode de Paiement -->
-            <div class="md:col-span-2">
-              <label class="block text-gray-700 font-semibold mb-3">Mode de Paiement</label>
-              <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <label *ngFor="let mode of modesPaiement" 
-                       class="flex flex-col items-center p-4 border-2 rounded-lg cursor-pointer transition-all"
-                       [class.border-gold-500]="paiementForm.get('modePaiement')?.value === mode"
-                       [class.bg-gold-50]="paiementForm.get('modePaiement')?.value === mode">
-                  <input type="radio" formControlName="modePaiement" [value]="mode" class="hidden">
-                  <span class="text-4xl mb-2">{{ getModePaiementIcon(mode) }}</span>
-                  <span class="text-sm font-medium text-center">{{ mode }}</span>
-                </label>
-              </div>
-            </div>
-  
-            <!-- Numéro de Téléphone -->
-            <div class="md:col-span-2" 
-                 *ngIf="paiementForm.get('modePaiement')?.value === 'WAVE' || 
-                        paiementForm.get('modePaiement')?.value === 'ORANGE_MONEY'">
-              <label class="block text-gray-700 font-semibold mb-2">Numéro de Téléphone</label>
-              <input type="tel" formControlName="numeroTelephone" 
-                     placeholder="+221771234567"
-                     class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
-              <div *ngIf="paiementForm.get('numeroTelephone')?.invalid && paiementForm.get('numeroTelephone')?.touched" 
-                   class="text-red-500 text-sm mt-1">
-                Numéro de téléphone invalide
-              </div>
-            </div>
-          </div>
-  
-          <button type="submit" [disabled]="paiementForm.invalid || loading"
-                  class="w-full btn-gold text-lg py-4 disabled:opacity-50">
-            <span *ngIf="!loading">Procéder au Paiement</span>
-            <span *ngIf="loading">Traitement...</span>
-          </button>
-        </form>
+  <div class="ml-64 flex-1 p-8 bg-gray-50 min-h-screen">
+    <!-- En-tête -->
+    <div class="flex items-center justify-between mb-8">
+      <h1 class="text-4xl font-bold text-gray-900">Mes Paiements</h1>
+      <button 
+        (click)="togglePaiementForm()"
+        class="btn-gold flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        Nouveau Paiement
+      </button>
+    </div>
+
+    <!-- Formulaire de Paiement -->
+    <div *ngIf="showPaiementForm" class="bg-white rounded-xl shadow-lg p-8 mb-8 animate-fade-in">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold text-gray-900">Effectuer un Paiement</h2>
+        <button (click)="togglePaiementForm()" class="text-gray-500 hover:text-gray-700">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
       </div>
-  
-      <!-- Liste des Paiements (Admin) -->
-      <div *ngIf="isAdmin && paiements.length > 0">
-        <h2 class="text-2xl font-bold mb-6">Historique des Paiements</h2>
-        
-        <div class="grid gap-4">
-          <div *ngFor="let paiement of paiements" 
-               class="bg-white rounded-xl shadow-lg p-6">
+      
+      <form [formGroup]="paiementForm" (ngSubmit)="effectuerPaiement()">
+        <!-- Sélection de la réservation -->
+        <div class="mb-6">
+          <label class="block text-gray-700 font-semibold mb-2">Réservation</label>
+          <select 
+            formControlName="reservationId" 
+            (change)="onReservationChange($event)"
+            class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
+            <option value="">Sélectionnez une réservation</option>
+            <option *ngFor="let reservation of reservations" [value]="reservation.id">
+              {{ reservation.numeroReservation }} - 
+              {{ reservation.volAller.villeDepart.nom }} → {{ reservation.volAller.villeArrivee.nom }} - 
+              {{ reservation.prixTotal | number:'1.0-0' }} FCFA
+            </option>
+          </select>
+        </div>
+
+        <!-- Montant (affichage seulement) -->
+        <div *ngIf="reservationSelectionnee" class="mb-6">
+          <div class="bg-gradient-to-r from-gold-500 to-gold-600 rounded-xl p-6 text-white">
             <div class="flex items-center justify-between">
-              <div class="flex-1">
-                <p class="text-lg font-bold text-gold-600">{{ paiement.numeroPaiement }}</p>
-                <p class="text-sm text-gray-500">Réservation: {{ paiement.numeroReservation }}</p>
-                <p class="text-sm text-gray-600 mt-2">
-                  {{ getModePaiementIcon(paiement.modePaiement) }} {{ paiement.modePaiement }}
+              <div>
+                <p class="text-sm text-gold-100">Montant à payer</p>
+                <p class="text-lg font-medium">{{ reservationSelectionnee.numeroReservation }}</p>
+                <p class="text-sm text-gold-100 mt-1">
+                  {{ reservationSelectionnee.volAller.villeDepart.nom }} → 
+                  {{ reservationSelectionnee.volAller.villeArrivee.nom }}
                 </p>
               </div>
-              
-              <div class="text-right">
-                <p class="text-2xl font-bold text-gold-600">{{ paiement.montant | number:'1.0-0' }} FCFA</p>
-                <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold mt-2"
-                      [ngClass]="getStatutClass(paiement.statut)">
-                  {{ paiement.statut }}
-                </span>
-              </div>
+              <p class="text-4xl font-bold">{{ reservationSelectionnee.prixTotal | number:'1.0-0' }} FCFA</p>
             </div>
           </div>
+        </div>
+
+      <!-- Mode de Paiement avec icônes SVG professionnelles -->
+<div class="mb-6">
+  <label class="block text-gray-700 font-semibold mb-3">Mode de Paiement</label>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <!-- Wave -->
+    <div 
+      (click)="selectModePaiement(modesPaiement[0])"
+      class="flex flex-col items-center p-6 border-2 rounded-lg cursor-pointer transition-all hover:shadow-lg"
+      [class.border-gold-500]="modePaiementSelectionne === modesPaiement[0]"
+      [class.bg-gold-50]="modePaiementSelectionne === modesPaiement[0]"
+      [class.border-gray-300]="modePaiementSelectionne !== modesPaiement[0]">
+      <svg class="w-16 h-16 mb-3" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="100" r="95" fill="#FF6B00"/>
+        <path d="M50 120 Q75 80, 100 120 T150 120" stroke="white" stroke-width="8" fill="none" stroke-linecap="round"/>
+        <path d="M60 140 Q80 110, 100 140 T140 140" stroke="white" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <circle cx="100" cy="60" r="8" fill="white"/>
+      </svg>
+      <span class="text-sm font-medium text-center text-gray-700">Wave</span>
+    </div>
+
+    <!-- Orange Money -->
+    <div 
+      (click)="selectModePaiement(modesPaiement[1])"
+      class="flex flex-col items-center p-6 border-2 rounded-lg cursor-pointer transition-all hover:shadow-lg"
+      [class.border-gold-500]="modePaiementSelectionne === modesPaiement[1]"
+      [class.bg-gold-50]="modePaiementSelectionne === modesPaiement[1]"
+      [class.border-gray-300]="modePaiementSelectionne !== modesPaiement[1]">
+      <svg class="w-16 h-16 mb-3" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="100" r="95" fill="#FF7900"/>
+        <rect x="70" y="60" width="60" height="80" rx="8" fill="white"/>
+        <rect x="75" y="65" width="50" height="35" fill="#FF7900"/>
+        <circle cx="100" cy="120" r="8" fill="#FF7900"/>
+      </svg>
+      <span class="text-sm font-medium text-center text-gray-700">Orange Money</span>
+    </div>
+
+    <!-- Espèces -->
+    <div 
+      (click)="selectModePaiement(modesPaiement[2])"
+      class="flex flex-col items-center p-6 border-2 rounded-lg cursor-pointer transition-all hover:shadow-lg"
+      [class.border-gold-500]="modePaiementSelectionne === modesPaiement[2]"
+      [class.bg-gold-50]="modePaiementSelectionne === modesPaiement[2]"
+      [class.border-gray-300]="modePaiementSelectionne !== modesPaiement[2]">
+      <svg class="w-16 h-16 mb-3" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="30" y="70" width="140" height="80" rx="8" fill="#4CAF50"/>
+        <circle cx="100" cy="110" r="25" stroke="white" stroke-width="4" fill="none"/>
+        <text x="100" y="120" text-anchor="middle" fill="white" font-size="30" font-weight="bold">F</text>
+      </svg>
+      <span class="text-sm font-medium text-center text-gray-700">Espèces</span>
+    </div>
+
+    <!-- Carte Bancaire -->
+    <div 
+      (click)="selectModePaiement(modesPaiement[3])"
+      class="flex flex-col items-center p-6 border-2 rounded-lg cursor-pointer transition-all hover:shadow-lg"
+      [class.border-gold-500]="modePaiementSelectionne === modesPaiement[3]"
+      [class.bg-gold-50]="modePaiementSelectionne === modesPaiement[3]"
+      [class.border-gray-300]="modePaiementSelectionne !== modesPaiement[3]">
+      <svg class="w-16 h-16 mb-3" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="30" y="60" width="140" height="90" rx="8" fill="#2196F3"/>
+        <rect x="30" y="80" width="140" height="20" fill="#1565C0"/>
+        <rect x="40" y="110" width="50" height="8" rx="2" fill="white"/>
+        <rect x="40" y="125" width="80" height="8" rx="2" fill="white"/>
+      </svg>
+      <span class="text-sm font-medium text-center text-gray-700">Carte Bancaire</span>
+    </div>
+  </div>
+</div>
+
+        <!-- Numéro de reçu -->
+        <div class="mb-6">
+          <label class="block text-gray-700 font-semibold mb-2">Numéro de Reçu (optionnel)</label>
+          <input 
+            type="text" 
+            formControlName="numeroRecu" 
+            placeholder="RECU-234"
+            class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
+        </div>
+
+        <!-- Commentaire -->
+        <div class="mb-6">
+          <label class="block text-gray-700 font-semibold mb-2">Commentaire (optionnel)</label>
+          <textarea 
+            formControlName="commentaire" 
+            rows="3"
+            placeholder="Merci de votre fidélité..."
+            class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none resize-none">
+          </textarea>
+        </div>
+
+        <!-- Boutons -->
+        <div class="flex gap-4">
+          <button 
+            type="submit" 
+            [disabled]="paiementForm.invalid || loading"
+            class="flex-1 btn-gold text-lg py-4 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+            <svg *ngIf="!loading" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <svg *ngIf="loading" class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span *ngIf="!loading">Confirmer le Paiement</span>
+            <span *ngIf="loading">Traitement...</span>
+          </button>
+          <button 
+            type="button"
+            (click)="togglePaiementForm()"
+            class="px-6 py-4 border-2 border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+            Annuler
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Liste des Paiements en Grille 3 colonnes -->
+    <div *ngIf="paiements.length > 0">
+      <h2 class="text-2xl font-bold mb-6 text-gray-900">Historique des Paiements</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngFor="let paiement of paiements" 
+             class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all p-6 border border-gray-200">
+          
+          <!-- En-tête de la carte -->
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex-1">
+              <p class="text-lg font-bold text-gold-600">{{ paiement.numeroPaiement }}</p>
+              <p class="text-sm text-gray-500">{{ paiement.numeroReservation }}</p>
+            </div>
+            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold"
+                  [ngClass]="getStatutClass(paiement.statut)">
+              {{ mapEnum(paiement.statut) }}
+            </span>
+          </div>
+
+          <!-- Mode de paiement -->
+          <div class="flex items-center gap-3 mb-4 pb-4 border-b border-gray-100">
+            <!-- Icône Wave -->
+            <svg *ngIf="paiement.modePaiement === 'WAVE'" class="w-10 h-10" viewBox="0 0 200 200">
+              <circle cx="100" cy="100" r="95" fill="#FF6B00"/>
+              <path d="M50 120 Q75 80, 100 120 T150 120" stroke="white" stroke-width="8" fill="none" stroke-linecap="round"/>
+              <path d="M60 140 Q80 110, 100 140 T140 140" stroke="white" stroke-width="6" fill="none" stroke-linecap="round"/>
+              <circle cx="100" cy="60" r="8" fill="white"/>
+            </svg>
+            
+            <!-- Icône Orange Money -->
+            <svg *ngIf="paiement.modePaiement === 'ORANGE_MONEY'" class="w-10 h-10" viewBox="0 0 200 200">
+              <circle cx="100" cy="100" r="95" fill="#FF7900"/>
+              <rect x="70" y="60" width="60" height="80" rx="8" fill="white"/>
+              <rect x="75" y="65" width="50" height="35" fill="#FF7900"/>
+              <circle cx="100" cy="120" r="8" fill="#FF7900"/>
+            </svg>
+
+            <!-- Icône Espèces -->
+            <svg *ngIf="paiement.modePaiement === 'ESPECES'" class="w-10 h-10" viewBox="0 0 200 200">
+              <rect x="30" y="70" width="140" height="80" rx="8" fill="#4CAF50"/>
+              <circle cx="100" cy="110" r="25" stroke="white" stroke-width="4" fill="none"/>
+              <text x="100" y="120" text-anchor="middle" fill="white" font-size="30" font-weight="bold">F</text>
+            </svg>
+
+            <!-- Icône Carte -->
+            <svg *ngIf="paiement.modePaiement === 'CARTE_BANCAIRE'" class="w-10 h-10" viewBox="0 0 200 200">
+              <rect x="30" y="60" width="140" height="90" rx="8" fill="#2196F3"/>
+              <rect x="30" y="80" width="140" height="20" fill="#1565C0"/>
+              <rect x="40" y="110" width="50" height="8" rx="2" fill="white"/>
+            </svg>
+
+            <div>
+              <p class="text-sm font-medium text-gray-700">{{ mapEnum(paiement.modePaiement) }}</p>
+              <p class="text-xs text-gray-500" *ngIf="paiement.datePaiement">
+                {{ paiement.datePaiement | date:'dd/MM/yyyy à HH:mm' }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Montant -->
+          <div class="mb-4">
+            <p class="text-sm text-gray-500 mb-1">Montant</p>
+            <p class="text-2xl font-bold text-gold-600">{{ paiement.montant | number:'1.0-0' }} FCFA</p>
+          </div>
+
+          <!-- Commentaire -->
+          <div *ngIf="paiement.commentaire" class="mb-4">
+            <p class="text-xs text-gray-500 italic">{{ paiement.commentaire }}</p>
+          </div>
+
+          <!-- Action -->
+          <button 
+            (click)="voirDetailsPaiement(paiement)"
+            class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gold-500 text-white rounded-lg hover:bg-gold-600 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+            </svg>
+            Voir Détails
+          </button>
         </div>
       </div>
     </div>
+
+    <!-- Message si aucun paiement -->
+    <div *ngIf="paiements.length === 0 && !showPaiementForm" 
+         class="text-center py-16">
+      <svg class="w-24 h-24 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+      </svg>
+      <h3 class="text-xl font-semibold text-gray-600 mb-2">Aucun paiement</h3>
+      <p class="text-gray-500">Vous n'avez pas encore effectué de paiement.</p>
+    </div>
   </div>
+</div>
+
+<!-- Modal Billet -->
+<div *ngIf="showBilletModal" 
+     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+     (click)="closeBilletModal()">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+       (click)="$event.stopPropagation()">
+    
+    <!-- En-tête du modal -->
+    <div class="bg-gradient-to-r from-gold-500 to-gold-600 p-6 text-white">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-2xl font-bold">✈️ Détails du Billet</h2>
+          <p class="text-gold-100 text-sm mt-1">{{ billetDetails?.numeroReservation }}</p>
+        </div>
+        <button (click)="closeBilletModal()" 
+                class="text-white hover:text-gray-200 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="billetDetails" class="p-6">
+      <!-- Informations Passager -->
+      <div class="bg-gray-50 rounded-lg p-4 mb-6">
+        <h3 class="font-bold text-gray-700 mb-3 flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+          </svg>
+          Passager
+        </h3>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <p class="text-sm text-gray-500">Nom complet</p>
+            <p class="font-semibold">{{ billetDetails.prenomPassager }} {{ billetDetails.nomPassager }}</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">Email</p>
+            <p class="font-semibold">{{ billetDetails.emailPassager }}</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">Téléphone</p>
+            <p class="font-semibold">{{ billetDetails.telephonePassager }}</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">Classe</p>
+            <p class="font-semibold">{{ mapEnum(billetDetails.classeVol) }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vol Aller -->
+      <div class="border-2 border-gold-500 rounded-lg p-4 mb-4">
+        <div class="bg-gold-500 text-white px-3 py-1 rounded-md inline-block mb-3 text-sm font-semibold">
+          VOL ALLER
+        </div>
+        
+        <div class="flex items-center justify-between mb-4">
+          <div class="text-center">
+            <p class="text-3xl font-bold text-gray-900">{{ billetDetails.codeVilleDepartAller }}</p>
+            <p class="text-sm text-gray-600">{{ billetDetails.villeDepartAller }}</p>
+            <p class="text-lg font-semibold text-gold-600 mt-1">{{ billetDetails.heureDepartAller }}</p>
+          </div>
+          
+          <div class="flex-1 px-4">
+            <div class="relative">
+              <div class="border-t-2 border-dashed border-gray-300"></div>
+              <svg class="w-8 h-8 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gold-500" 
+                   fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
+              </svg>
+            </div>
+            <p class="text-center text-xs text-gray-500 mt-1">{{ billetDetails.dureeVolAller }}h</p>
+          </div>
+          
+          <div class="text-center">
+            <p class="text-3xl font-bold text-gray-900">{{ billetDetails.codeVilleArriveeAller }}</p>
+            <p class="text-sm text-gray-600">{{ billetDetails.villeArriveeAller }}</p>
+            <p class="text-lg font-semibold text-gold-600 mt-1">{{ billetDetails.heureArriveeAller }}</p>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4 pt-3 border-t border-gray-200">
+          <div>
+            <p class="text-xs text-gray-500">Vol</p>
+            <p class="font-semibold">{{ billetDetails.numeroVolAller }}</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-500">Date</p>
+            <p class="font-semibold">{{ billetDetails.dateDepartAller | date:'dd/MM/yyyy' }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vol Retour (si existe) -->
+      <div *ngIf="billetDetails.numeroVolRetour" class="border-2 border-gold-500 rounded-lg p-4 mb-4">
+        <div class="bg-gold-500 text-white px-3 py-1 rounded-md inline-block mb-3 text-sm font-semibold">
+          VOL RETOUR
+        </div>
+        
+        <div class="flex items-center justify-between mb-4">
+          <div class="text-center">
+            <p class="text-3xl font-bold text-gray-900">{{ billetDetails.codeVilleDepartRetour }}</p>
+            <p class="text-sm text-gray-600">{{ billetDetails.villeDepartRetour }}</p>
+            <p class="text-lg font-semibold text-gold-600 mt-1">{{ billetDetails.heureDepartRetour }}</p>
+          </div>
+          
+          <div class="flex-1 px-4">
+            <div class="relative">
+              <div class="border-t-2 border-dashed border-gray-300"></div>
+              <svg class="w-8 h-8 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gold-500" 
+                   fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
+              </svg>
+            </div>
+            <p class="text-center text-xs text-gray-500 mt-1">{{ billetDetails.dureeVolRetour }}h</p>
+          </div>
+          
+          <div class="text-center">
+            <p class="text-3xl font-bold text-gray-900">{{ billetDetails.codeVilleArriveeRetour }}</p>
+            <p class="text-sm text-gray-600">{{ billetDetails.villeArriveeRetour }}</p>
+            <p class="text-lg font-semibold text-gold-600 mt-1">{{ billetDetails.heureArriveeRetour }}</p>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4 pt-3 border-t border-gray-200">
+          <div>
+            <p class="text-xs text-gray-500">Vol</p>
+            <p class="font-semibold">{{ billetDetails.numeroVolRetour }}</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-500">Date</p>
+            <p class="font-semibold">{{ billetDetails.dateDepartRetour | date:'dd/MM/yyyy' }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prix Total -->
+      <div class="bg-gradient-to-r from-gold-500 to-gold-600 rounded-lg p-4 text-white mb-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gold-100">Prix Total</p>
+            <p class="text-xs text-gold-100">{{ billetDetails.nombrePassagers }} passager(s)</p>
+          </div>
+          <p class="text-3xl font-bold">{{ billetDetails.prixTotal | number:'1.0-0' }} FCFA</p>
+        </div>
+      </div>
+
+      <!-- QR Code -->
+      <div *ngIf="billetDetails.qrCode" class="text-center mb-6">
+        <img [src]="billetDetails.qrCode" alt="QR Code" class="w-32 h-32 mx-auto">
+        <p class="text-sm text-gray-500 mt-2">Scannez ce code à l'aéroport</p>
+      </div>
+
+      <!-- Bouton Télécharger -->
+      <button 
+        (click)="telechargerBillet()"
+        class="w-full btn-gold py-3 flex items-center justify-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+        Télécharger le Billet PDF
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Succès -->
+<div *ngIf="showSuccessModal" 
+     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center animate-fade-in">
+    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+      <svg class="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+      </svg>
+    </div>
+    <h3 class="text-2xl font-bold text-gray-900 mb-2">Paiement Réussi !</h3>
+    <p class="text-gray-600">Votre paiement a été enregistré avec succès.</p>
+  </div>
+</div>
+
+
+<!-- 2026-02-06T12:13:21.625Z  INFO 10874 --- [goldenfly] [   scheduling-1] c.g.design.services.PaiementService      : 📊 0 réservation(s) à annuler pour non-paiement
+2026-02-06T12:13:21.634Z  INFO 10874 --- [goldenfly] [   scheduling-1] com.goldenfly.config.ScheduledTasks      : Vérification des réservations non payées terminée avec succès -->

@@ -8,13 +8,15 @@ import { Utilisateur } from '../../../core/models/utilisateur.model';
   selector: 'app-sidebar',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './sidebar.component.html'
+  templateUrl: './sidebar.component.html',
+  styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit {
   authService = inject(AuthService);
   router = inject(Router);
   currentUser: Utilisateur | null = null;
   isAdmin = false;
+  showLogoutModal = false;
 
   ngOnInit() {
     this.authService.currentUser$.subscribe(user => {
@@ -23,7 +25,16 @@ export class SidebarComponent implements OnInit {
     });
   }
 
-  logout() {
+  openLogoutModal() {
+    this.showLogoutModal = true;
+  }
+
+  closeLogoutModal() {
+    this.showLogoutModal = false;
+  }
+
+  confirmLogout() {
     this.authService.logout();
+    this.showLogoutModal = false;
   }
 }
