@@ -85,7 +85,6 @@ pipeline {
                         """
                     }
                     
-                    // Nettoyage
                     sh """
                         docker rmi ${DOCKER_HUB_REPO}:${BUILD_NUMBER} || true
                         docker rmi ${DOCKER_HUB_REPO}:${IMAGE_TAG} || true
