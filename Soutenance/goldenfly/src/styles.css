@@ -1,86 +1,104 @@
-/* Importer Google Fonts EN PREMIER */
+/* Importer Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-/* Ensuite Tailwind */
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: 'Inter', sans-serif;
-  background-color: #FFFFFF;
-  color: #1F2937;
+    font-family: 'Inter', sans-serif;
+    background-color: #FFFFFF;
+    color: #1F2937;
 }
 
 /* Scrollbar personnalisé */
 ::-webkit-scrollbar {
-  width: 10px;
+    width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+    background: #f1f1f1;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #DFB717;
-  border-radius: 5px;
+    background: #DFB717;
+    border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #C9A615;
+    background: #C9A615;
 }
 
 /* Animations personnalisées */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .fade-in {
-  animation: fadeIn 0.6s ease-out;
+    animation: fadeIn 0.6s ease-out;
 }
 
 @keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(100px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+    from {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .slide-in-right {
-  animation: slideInRight 0.8s ease-out;
+    animation: slideInRight 0.8s ease-out;
 }
 
 /* Bouton Gold personnalisé */
 .btn-gold {
-  @apply bg-gold-500 text-white px-6 py-3 rounded-lg font-semibold 
-         hover:bg-gold-600 transition-all duration-300 
-         transform hover:scale-105 hover:shadow-xl;
+    background-color: #DFB717;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-gold:hover {
+    background-color: #C9A615;
+    transform: scale(1.05);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 }
 
 .btn-gold-outline {
-  @apply border-2 border-gold-500 text-gold-500 px-6 py-3 rounded-lg 
-         font-semibold hover:bg-gold-500 hover:text-white 
-         transition-all duration-300 transform hover:scale-105;
+    border: 2px solid #DFB717;
+    color: #DFB717;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-gold-outline:hover {
+    background-color: #DFB717;
+    color: white;
+    transform: scale(1.05);
 }
 
 /* Cards avec effet */
 .card-hover {
-  @apply transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl;
+    transition: all 0.3s;
+}
+
+.card-hover:hover {
+    transform: translateY(-0.5rem);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
