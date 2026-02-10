@@ -4,7 +4,8 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } 
 import { UtilisateurService } from '../../../core/services/utilisateur.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { SidebarComponent } from '../../../shared/components/sidebar/sidebar.component';
-import { Utilisateur, ProfileEnum } from '../../../core/models/utilisateur.model';
+import { Utilisateur, ProfileEnum, CreateUtilisateur, UpdateUtilisateur } from '../../../core/models/utilisateur.model';
+
 @Component({
   selector: 'app-list-utilisateurs',
   standalone: true,
@@ -19,9 +20,17 @@ export class ListUtilisateursComponent implements OnInit {
   utilisateurs: Utilisateur[] = [];
   filteredUtilisateurs: Utilisateur[] = [];
   loading = false;
+  
+  // Modals
   showModal = false;
+  showSuccessModal = false;
+  showErrorModal = false;
+  showToggleModal = false;
+  
   editMode = false;
   selectedUserId?: number;
+  selectedUser?: Utilisateur;
+  modalMessage = '';
   
   userForm!: FormGroup;
   searchTerm = '';
@@ -35,8 +44,8 @@ export class ListUtilisateursComponent implements OnInit {
 
   initForm() {
     this.userForm = this.fb.group({
-      nom: ['', Validators.required],
-      prenom: ['', Validators.required],
+      nom: ['', [Validators.required, Validators.minLength(2)]],
+      prenom: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       telephone: ['', [Validators.required, Validators.pattern('^[+]?[0-9]{9,15}$')]],
@@ -53,7 +62,10 @@ export class ListUtilisateursComponent implements OnInit {
         this.filteredUtilisateurs = users;
         this.loading = false;
       },
-      error: () => this.loading = false
+      error: (err) => {
+        this.loading = false;
+        this.showError('Erreur lors du chargement des utilisateurs');
+      }
     });
   }
 
@@ -62,13 +74,24 @@ export class ListUtilisateursComponent implements OnInit {
     if (user) {
       this.editMode = true;
       this.selectedUserId = user.id;
-      this.userForm.patchValue(user);
+      this.userForm.patchValue({
+        nom: user.nom,
+        prenom: user.prenom,
+        email: user.email,
+        telephone: user.telephone,
+        age: user.age,
+        profile: user.profile
+      });
+      // En mode édition, le mot de passe est optionnel
       this.userForm.get('password')?.clearValidators();
       this.userForm.get('password')?.updateValueAndValidity();
     } else {
       this.editMode = false;
       this.selectedUserId = undefined;
       this.userForm.reset({ profile: ProfileEnum.VOYAGEUR });
+      // En mode création, le mot de passe est requis
+      this.userForm.get('password')?.setValidators([Validators.required, Validators.minLength(6)]);
+      this.userForm.get('password')?.updateValueAndValidity();
     }
   }
 
@@ -80,42 +103,100 @@ export class ListUtilisateursComponent implements OnInit {
   onSubmit() {
     if (this.userForm.valid) {
       this.loading = true;
-      const formData = { ...this.userForm.value };
       
-      if (this.editMode && !formData.password) {
-        delete formData.password;
+      // Préparer les données selon le modèle CreateUtilisateur
+      const formData: any = {
+        nom: this.userForm.value.nom,
+        prenom: this.userForm.value.prenom,
+        email: this.userForm.value.email,
+        telephone: this.userForm.value.telephone,
+        age: this.userForm.value.age,
+        profile: this.userForm.value.profile
+      };
+
+      // Ajouter le mot de passe seulement s'il est renseigné
+      if (this.userForm.value.password && this.userForm.value.password.trim() !== '') {
+        formData.password = this.userForm.value.password;
       }
 
       const request = this.editMode && this.selectedUserId
         ? this.utilisateurService.updateUtilisateur(this.selectedUserId, formData)
-        : this.utilisateurService.createUtilisateur(formData);
+        : this.utilisateurService.createUtilisateur(formData as CreateUtilisateur);
 
       request.subscribe({
         next: () => {
           this.loading = false;
           this.closeModal();
           this.loadUtilisateurs();
-          alert(this.editMode ? 'Utilisateur modifié !' : 'Utilisateur créé !');
+          this.showSuccess(this.editMode ? 'Utilisateur modifié avec succès !' : 'Utilisateur créé avec succès !');
         },
         error: (err) => {
           this.loading = false;
-          alert('Erreur: ' + (err.error?.message || 'Opération échouée'));
+          this.showError(err.error?.message || 'Une erreur est survenue lors de l\'opération');
         }
       });
     }
   }
+// Désactiver définitivement un utilisateur
+deactivateUser() {
+  if (!this.selectedUser) return;
 
-  deleteUser(id: number) {
-    if (confirm('Voulez-vous vraiment supprimer cet utilisateur ?')) {
-      this.utilisateurService.deleteUtilisateur(id).subscribe({
-        next: () => {
-          alert('Utilisateur supprimé !');
-          this.loadUtilisateurs();
-        },
-        error: (err) => alert('Erreur: ' + err.error?.message)
-      });
+  this.loading = true;
+
+  const updateData: UpdateUtilisateur = { 
+    actif: false
+  };
+
+  this.utilisateurService.updateUtilisateur(this.selectedUser.id, updateData).subscribe({
+    next: () => {
+      this.loading = false;
+      this.closeToggleModal();
+      this.loadUtilisateurs();
+      this.showSuccess('Utilisateur désactivé avec succès !');
+    },
+    error: (err) => {
+      this.loading = false;
+      this.closeToggleModal();
+      this.showError(err.error?.message || 'Erreur lors de la désactivation');
     }
+  });
+}
+  // Ouvrir le modal de confirmation pour toggle status
+  openToggleModal(user: Utilisateur) {
+    this.selectedUser = user;
+    this.showToggleModal = true;
   }
+
+  closeToggleModal() {
+    this.showToggleModal = false;
+    this.selectedUser = undefined;
+  }
+
+  // Toggle le statut actif/inactif
+toggleUserStatus() {
+  if (!this.selectedUser) return;
+
+  this.loading = true;
+  const newStatus = !this.selectedUser.actif;
+
+  const updateData: UpdateUtilisateur = { 
+    actif: newStatus
+  };
+
+  this.utilisateurService.updateUtilisateur(this.selectedUser.id, updateData).subscribe({
+    next: () => {
+      this.loading = false;
+      this.closeToggleModal();
+      this.loadUtilisateurs();
+      this.showSuccess(`Utilisateur ${newStatus ? 'activé' : 'désactivé'} avec succès !`);
+    },
+    error: (err) => {
+      this.loading = false;
+      this.closeToggleModal();
+      this.showError(err.error?.message || 'Erreur lors du changement de statut');
+    }
+  });
+}
 
   filterUsers() {
     let filtered = this.utilisateurs;
@@ -131,7 +212,8 @@ export class ListUtilisateursComponent implements OnInit {
       filtered = filtered.filter(u => 
         u.nom.toLowerCase().includes(term) ||
         u.prenom.toLowerCase().includes(term) ||
-        u.email.toLowerCase().includes(term)
+        u.email.toLowerCase().includes(term) ||
+        u.telephone.toLowerCase().includes(term)
       );
     }
 
@@ -143,6 +225,25 @@ export class ListUtilisateursComponent implements OnInit {
       ? 'bg-purple-100 text-purple-700' 
       : 'bg-blue-100 text-blue-700';
   }
-}
 
-// le html 
+  // Modals helpers
+  showSuccess(message: string) {
+    this.modalMessage = message;
+    this.showSuccessModal = true;
+  }
+
+  showError(message: string) {
+    this.modalMessage = message;
+    this.showErrorModal = true;
+  }
+
+  closeSuccessModal() {
+    this.showSuccessModal = false;
+    this.modalMessage = '';
+  }
+
+  closeErrorModal() {
+    this.showErrorModal = false;
+    this.modalMessage = '';
+  }
+}

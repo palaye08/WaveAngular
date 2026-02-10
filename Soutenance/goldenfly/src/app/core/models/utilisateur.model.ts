@@ -24,12 +24,29 @@ export enum ProfileEnum {
     age: number;
     profile: ProfileEnum;
   }
-  
+  export interface UpdateUtilisateur {
+  nom?: string;
+  prenom?: string;
+  email?: string;
+  password?: string;
+  telephone?: string;
+  age?: number;
+  profile?: ProfileEnum;
+  actif?: boolean;
+}
   export interface LoginRequest {
     email: string;
     password: string;
   }
-  
+  export interface UpdateMeRequest {
+  nom: string;
+  prenom: string;
+  email: string;
+  telephone: string;
+  age: number;
+  nouveauMotDePasse?: string;
+  confirmationMotDePasse?: string;
+}
   export interface AuthResponse {
     token: string;
     refreshToken: string;

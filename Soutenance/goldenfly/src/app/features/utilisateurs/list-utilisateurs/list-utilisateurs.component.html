@@ -1,179 +1,335 @@
 <div class="flex">
-    <app-sidebar></app-sidebar>
-    
-    <div class="ml-64 flex-1 p-8 bg-gray-50 min-h-screen">
-      <!-- Header -->
-      <div class="flex items-center justify-between mb-8">
-        <h1 class="text-4xl font-bold text-gray-900">Gestion Utilisateurs</h1>
-        <button (click)="openModal()" class="btn-gold">
-          + Créer Utilisateur
-        </button>
-      </div>
+  <app-sidebar></app-sidebar>
   
-      <!-- Filtres -->
-      <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
-        <div class="grid md:grid-cols-3 gap-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Rechercher</label>
-            <input type="text" [(ngModel)]="searchTerm" (input)="filterUsers()"
-                   placeholder="Nom, prénom, email..."
-                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
-          </div>
-  
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Profil</label>
-            <select [(ngModel)]="filterProfile" (change)="filterUsers()"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
-              <option value="ALL">Tous les profils</option>
-              <option *ngFor="let profile of profiles" [value]="profile">{{ profile }}</option>
-            </select>
-          </div>
-  
-          <div class="flex items-end">
-            <button (click)="loadUtilisateurs()" class="btn-gold-outline w-full">
-               Actualiser
-            </button>
-          </div>
+  <div class="ml-64 flex-1 p-8 bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+      <h1 class="text-4xl font-bold text-gray-900">Gestion Utilisateurs</h1>
+      <button (click)="openModal()" class="btn-gold flex items-center space-x-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        <span>Créer Utilisateur</span>
+      </button>
+    </div>
+
+    <!-- Filtres -->
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+      <div class="grid md:grid-cols-3 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            Rechercher
+          </label>
+          <input type="text" [(ngModel)]="searchTerm" (input)="filterUsers()"
+                 placeholder="Nom, prénom, email, téléphone..."
+                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+            </svg>
+            Profil
+          </label>
+          <select [(ngModel)]="filterProfile" (change)="filterUsers()"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
+            <option value="ALL">Tous les profils</option>
+            <option *ngFor="let profile of profiles" [value]="profile">{{ profile }}</option>
+          </select>
+        </div>
+
+        <div class="flex items-end">
+          <button (click)="loadUtilisateurs()" class="btn-gold-outline w-full flex items-center justify-center space-x-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+            <span>Actualiser</span>
+          </button>
         </div>
       </div>
-  
-      <!-- Loading -->
-      <div *ngIf="loading && !showModal" class="text-center py-12">
-        <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-gold-500 border-t-transparent"></div>
-        <p class="mt-4 text-gray-600">Chargement...</p>
-      </div>
-  
-      <!-- Table -->
-      <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gradient-to-r from-gold-500 to-gold-600">
-            <tr>
-              <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Utilisateur</th>
-              <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Contact</th>
-              <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Profil</th>
-              <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Statut</th>
-              <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Actions</th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr *ngFor="let user of filteredUtilisateurs" class="hover:bg-gray-50 transition-colors">
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="flex items-center">
-                  <div class="flex-shrink-0 h-10 w-10 bg-gold-500 rounded-full flex items-center justify-center text-white font-bold">
-                    {{ user.prenom.charAt(0) }}{{ user.nom.charAt(0) }}
-                  </div>
-                  <div class="ml-4">
-                    <div class="text-sm font-medium text-gray-900">{{ user.prenom }} {{ user.nom }}</div>
-                    <div class="text-sm text-gray-500">{{ user.age }} ans</div>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="loading && !showModal" class="text-center py-12">
+      <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-gold-500 border-t-transparent"></div>
+      <p class="mt-4 text-gray-600">Chargement...</p>
+    </div>
+
+    <!-- Table -->
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gradient-to-r from-gold-500 to-gold-600">
+          <tr>
+            <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Utilisateur</th>
+            <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Contact</th>
+            <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Profil</th>
+            <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Statut</th>
+            <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <tr *ngFor="let user of filteredUtilisateurs" class="hover:bg-gray-50 transition-colors">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="flex items-center">
+                <div class="flex-shrink-0 h-12 w-12 bg-gradient-to-br from-gold-400 to-gold-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                  {{ user.prenom.charAt(0) }}{{ user.nom.charAt(0) }}
+                </div>
+                <div class="ml-4">
+                  <div class="text-sm font-medium text-gray-900">{{ user.prenom }} {{ user.nom }}</div>
+                  <div class="text-sm text-gray-500 flex items-center">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    {{ user.age }} ans
                   </div>
                 </div>
-              </td>
-              <td class="px-6 py-4">
-                <div class="text-sm text-gray-900">{{ user.email }}</div>
-                <div class="text-sm text-gray-500">{{ user.telephone }}</div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full"
-                      [ngClass]="getProfileClass(user.profile)">
-                  {{ user.profile }}
-                </span>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full"
-                      [class.bg-green-100]="user.actif"
-                      [class.text-green-800]="user.actif"
-                      [class.bg-red-100]="!user.actif"
-                      [class.text-red-800]="!user.actif">
-                  {{ user.actif ? 'Actif' : 'Inactif' }}
-                </span>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                <button (click)="openModal(user)" class="text-blue-600 hover:text-blue-900">
-                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-            </svg>
-                </button>
-                <button (click)="deleteUser(user.id)" class="text-red-600 hover:text-red-900">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              </div>
+            </td>
+            <td class="px-6 py-4">
+              <div class="text-sm text-gray-900 flex items-center">
+                <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+                {{ user.email }}
+              </div>
+              <div class="text-sm text-gray-500 flex items-center">
+                <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                </svg>
+                {{ user.telephone }}
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full"
+                    [ngClass]="getProfileClass(user.profile)">
+                {{ user.profile }}
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full"
+                    [class.bg-green-100]="user.actif"
+                    [class.text-green-800]="user.actif"
+                    [class.bg-red-100]="!user.actif"
+                    [class.text-red-800]="!user.actif">
+                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <circle cx="10" cy="10" r="4"/>
+                </svg>
+                {{ user.actif ? 'Actif' : 'Inactif' }}
+              </span>
+            </td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+  <!-- Bouton Modifier -->
+  <button (click)="openModal(user)" 
+          class="inline-flex items-center px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors group"
+          title="Modifier">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+    </svg>
+  </button>
   
-        <div *ngIf="!loading && filteredUtilisateurs.length === 0" class="text-center py-12 text-gray-500">
-          Aucun utilisateur trouvé
+  <!-- Bouton Désactiver (visible seulement si actif) -->
+  <button *ngIf="user.actif" 
+          (click)="openToggleModal(user)" 
+          class="inline-flex items-center px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors group"
+          title="Désactiver le compte">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+    </svg>
+  </button>
+</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div *ngIf="!loading && filteredUtilisateurs.length === 0" class="text-center py-12 text-gray-500">
+        <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+        </svg>
+        <p class="text-lg font-medium">Aucun utilisateur trouvé</p>
+        <p class="text-sm text-gray-400 mt-2">Essayez de modifier vos filtres de recherche</p>
+      </div>
+    </div>
+
+    <!-- Modal Ajout/Modification -->
+    <div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto animate-fadeIn">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold text-gray-900">
+            {{ editMode ? 'Modifier' : 'Créer' }} un Utilisateur
+          </h2>
+          <button (click)="closeModal()" class="text-gray-400 hover:text-gray-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+        
+        <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-gray-700 font-semibold mb-2">Nom *</label>
+              <input type="text" formControlName="nom"
+                     class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none"
+                     [class.border-red-500]="userForm.get('nom')?.invalid && userForm.get('nom')?.touched">
+              <p *ngIf="userForm.get('nom')?.invalid && userForm.get('nom')?.touched" class="text-red-500 text-xs mt-1">
+                Nom requis (min. 2 caractères)
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-gray-700 font-semibold mb-2">Prénom *</label>
+              <input type="text" formControlName="prenom"
+                     class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none"
+                     [class.border-red-500]="userForm.get('prenom')?.invalid && userForm.get('prenom')?.touched">
+              <p *ngIf="userForm.get('prenom')?.invalid && userForm.get('prenom')?.touched" class="text-red-500 text-xs mt-1">
+                Prénom requis (min. 2 caractères)
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-gray-700 font-semibold mb-2">Email *</label>
+              <input type="email" formControlName="email"
+                     class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none"
+                     [class.border-red-500]="userForm.get('email')?.invalid && userForm.get('email')?.touched">
+              <p *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="text-red-500 text-xs mt-1">
+                Email valide requis
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-gray-700 font-semibold mb-2">Téléphone *</label>
+              <input type="tel" formControlName="telephone" placeholder="+221771234567"
+                     class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none"
+                     [class.border-red-500]="userForm.get('telephone')?.invalid && userForm.get('telephone')?.touched">
+              <p *ngIf="userForm.get('telephone')?.invalid && userForm.get('telephone')?.touched" class="text-red-500 text-xs mt-1">
+                Téléphone valide requis (9-15 chiffres)
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-gray-700 font-semibold mb-2">Âge *</label>
+              <input type="number" formControlName="age" min="18" max="120"
+                     class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none"
+                     [class.border-red-500]="userForm.get('age')?.invalid && userForm.get('age')?.touched">
+              <p *ngIf="userForm.get('age')?.invalid && userForm.get('age')?.touched" class="text-red-500 text-xs mt-1">
+                Âge requis (18-120)
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-gray-700 font-semibold mb-2">Profil *</label>
+              <select formControlName="profile"
+                      class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
+                <option *ngFor="let profile of profiles" [value]="profile">{{ profile }}</option>
+              </select>
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="block text-gray-700 font-semibold mb-2">
+                Mot de passe {{ editMode ? '(laisser vide pour ne pas changer)' : '*' }}
+              </label>
+              <input type="password" formControlName="password"
+                     class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none"
+                     [class.border-red-500]="userForm.get('password')?.invalid && userForm.get('password')?.touched">
+              <p *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched" class="text-red-500 text-xs mt-1">
+                Mot de passe requis (min. 6 caractères)
+              </p>
+            </div>
+          </div>
+
+          <div class="flex space-x-4 mt-6">
+            <button type="submit" [disabled]="userForm.invalid || loading"
+                    class="flex-1 btn-gold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2">
+              <svg *ngIf="loading" class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span>{{ loading ? 'Enregistrement...' : 'Enregistrer' }}</span>
+            </button>
+            <button type="button" (click)="closeModal()"
+                    class="flex-1 btn-gold-outline">
+              Annuler
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+ <!-- Modal Désactivation -->
+<div *ngIf="showToggleModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4 animate-fadeIn">
+    <div class="text-center mb-6">
+      <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-4">
+        <svg class="h-10 w-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+        </svg>
+      </div>
+      <h3 class="text-2xl font-bold text-gray-900 mb-2">
+        Désactiver l'utilisateur
+      </h3>
+      <p class="text-gray-600">
+        Voulez-vous vraiment désactiver 
+        <span class="font-bold text-red-600">{{ selectedUser?.prenom }} {{ selectedUser?.nom }}</span> ?
+      </p>
+      <p class="text-sm text-gray-500 mt-2">
+        Cette action est irréversible. L'utilisateur ne pourra plus se connecter.
+      </p>
+    </div>
+    <div class="flex space-x-4">
+      <button (click)="closeToggleModal()" 
+              class="flex-1 px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50 transition">
+        Annuler
+      </button>
+      <button (click)="deactivateUser()" 
+              [disabled]="loading"
+              class="flex-1 px-6 py-3 rounded-lg font-semibold transition disabled:opacity-50 bg-red-500 hover:bg-red-600 text-white">
+        <span *ngIf="!loading">Désactiver</span>
+        <span *ngIf="loading">Traitement...</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+    <!-- Modal de Succès -->
+    <div *ngIf="showSuccessModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4 animate-fadeIn">
+        <div class="text-center">
+          <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
+            <svg class="h-10 w-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-2">Succès !</h3>
+          <p class="text-gray-600 mb-6">{{ modalMessage }}</p>
+          <button (click)="closeSuccessModal()" 
+                  class="px-8 py-3 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 transition">
+            OK
+          </button>
         </div>
       </div>
-  
-      <!-- Modal -->
-      <div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-          <h2 class="text-2xl font-bold mb-6">{{ editMode ? 'Modifier' : 'Créer' }} un Utilisateur</h2>
-          
-          <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-            <div class="grid md:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-gray-700 font-semibold mb-2">Nom *</label>
-                <input type="text" formControlName="nom"
-                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
-              </div>
-  
-              <div>
-                <label class="block text-gray-700 font-semibold mb-2">Prénom *</label>
-                <input type="text" formControlName="prenom"
-                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
-              </div>
-  
-              <div>
-                <label class="block text-gray-700 font-semibold mb-2">Email *</label>
-                <input type="email" formControlName="email"
-                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
-              </div>
-  
-              <div>
-                <label class="block text-gray-700 font-semibold mb-2">Téléphone *</label>
-                <input type="tel" formControlName="telephone"
-                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
-              </div>
-  
-              <div>
-                <label class="block text-gray-700 font-semibold mb-2">Âge *</label>
-                <input type="number" formControlName="age"
-                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
-              </div>
-  
-              <div>
-                <label class="block text-gray-700 font-semibold mb-2">Profil *</label>
-                <select formControlName="profile"
-                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
-                  <option *ngFor="let profile of profiles" [value]="profile">{{ profile }}</option>
-                </select>
-              </div>
-  
-              <div class="md:col-span-2">
-                <label class="block text-gray-700 font-semibold mb-2">
-                  Mot de passe {{ editMode ? '(laisser vide pour ne pas changer)' : '*' }}
-                </label>
-                <input type="password" formControlName="password"
-                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none">
-              </div>
-            </div>
-  
-            <div class="flex space-x-4 mt-6">
-              <button type="submit" [disabled]="userForm.invalid || loading"
-                      class="flex-1 btn-gold disabled:opacity-50">
-                {{ loading ? 'Enregistrement...' : 'Enregistrer' }}
-              </button>
-              <button type="button" (click)="closeModal()"
-                      class="flex-1 btn-gold-outline">
-                Annuler
-              </button>
-            </div>
-          </form>
+    </div>
+
+    <!-- Modal d'Erreur -->
+    <div *ngIf="showErrorModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4 animate-fadeIn">
+        <div class="text-center">
+          <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-4">
+            <svg class="h-10 w-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-2">Erreur</h3>
+          <p class="text-gray-600 mb-6">{{ modalMessage }}</p>
+          <button (click)="closeErrorModal()" 
+                  class="px-8 py-3 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition">
+            Fermer
+          </button>
         </div>
       </div>
     </div>
   </div>
+</div>
