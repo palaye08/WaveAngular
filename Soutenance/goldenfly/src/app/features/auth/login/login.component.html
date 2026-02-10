@@ -1,85 +1,85 @@
 <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gold-50 to-white px-4">
-    <div class="max-w-md w-full">
-      <!-- Logo -->
-      <div class="text-center mb-8">
-        <div class="flex items-center justify-center space-x-2 mb-4">
-          <span class="text-5xl">✈️</span>
-          <h1 class="text-4xl font-bold bg-gradient-to-r from-gold-500 to-gold-600 bg-clip-text text-transparent">
-            GoldenFly
-          </h1>
-        </div>
-        <p class="text-gray-600">Connectez-vous à votre compte</p>
+  <div class="max-w-md w-full">
+    <!-- Logo -->
+    <div class="text-center mb-8">
+      <div class="flex items-center justify-center space-x-3 mb-4">
+        <img src="../../assets/logo.png" class="w-14 h-14" alt="GoldenFly Logo">
+        <h1 class="text-4xl font-bold bg-gradient-to-r from-gold-500 to-gold-600 bg-clip-text text-transparent">
+          GoldenFly
+        </h1>
       </div>
-  
-      <!-- Card -->
-      <div class="bg-white rounded-2xl shadow-2xl p-8">
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-          <!-- Email -->
-          <div class="mb-6">
-            <label class="block text-gray-700 font-semibold mb-2">Email</label>
-            <input 
-              type="email" 
-              formControlName="email"
-              class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none transition-colors"
-              placeholder="votre@email.com">
-            <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" 
-                 class="text-red-500 text-sm mt-1">
-              Email invalide
-            </div>
+      <p class="text-gray-600">Connectez-vous à votre compte</p>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-white rounded-2xl shadow-2xl p-8">   
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <!-- Email -->
+        <div class="mb-6">
+          <label class="block text-gray-700 font-semibold mb-2">Email</label>
+          <input 
+            type="email" 
+            formControlName="email"
+            class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none transition-colors"
+            placeholder="votre@email.com">
+          <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" 
+               class="text-red-500 text-sm mt-1">
+            Email invalide
           </div>
-  
-          <!-- Password -->
-          <div class="mb-6">
-            <label class="block text-gray-700 font-semibold mb-2">Mot de passe</label>
-            <input 
-              type="password" 
-              formControlName="password"
-              class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none transition-colors"
-              placeholder="••••••••">
-            <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" 
-                 class="text-red-500 text-sm mt-1">
-              Mot de passe requis (min. 6 caractères)
-            </div>
-          </div>
-  
-          <!-- Error Message -->
-          <div *ngIf="errorMessage" 
-               class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
-            {{ errorMessage }}
-          </div>
-  
-          <!-- Submit Button -->
-          <button 
-            type="submit" 
-            [disabled]="loginForm.invalid || loading"
-            class="w-full btn-gold text-lg py-3 disabled:opacity-50 disabled:cursor-not-allowed">
-            <span *ngIf="!loading">Se Connecter</span>
-            <span *ngIf="loading" class="flex items-center justify-center">
-              <svg class="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Connexion...
-            </span>
-          </button>
-        </form>
-  
-        <!-- Register Link -->
-        <div class="mt-6 text-center">
-          <p class="text-gray-600">
-            Pas encore de compte ? 
-            <a routerLink="/register" class="text-gold-500 hover:text-gold-600 font-semibold">
-              S'inscrire
-            </a>
-          </p>
         </div>
-  
-        <!-- Back to Home -->
-        <div class="mt-4 text-center">
-          <a routerLink="/portail" class="text-gray-500 hover:text-gray-700 text-sm">
-            ← Retour à l'accueil
+
+        <!-- Password -->
+        <div class="mb-6">
+          <label class="block text-gray-700 font-semibold mb-2">Mot de passe</label>
+          <input 
+            type="password" 
+            formControlName="password"
+            class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none transition-colors"
+            placeholder="••••••••">
+          <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" 
+               class="text-red-500 text-sm mt-1">
+            Mot de passe requis (min. 6 caractères)
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" 
+             class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+          {{ errorMessage }}
+        </div>
+
+        <!-- Submit Button -->
+        <button 
+          type="submit" 
+          [disabled]="loginForm.invalid || loading"
+          class="w-full btn-gold text-lg py-3 disabled:opacity-50 disabled:cursor-not-allowed">
+          <span *ngIf="!loading">Se Connecter</span>
+          <span *ngIf="loading" class="flex items-center justify-center">
+            <svg class="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Connexion...
+          </span>
+        </button>
+      </form>
+
+      <!-- Register Link -->
+      <div class="mt-6 text-center">
+        <p class="text-gray-600">
+          Pas encore de compte ? 
+          <a routerLink="/register" class="text-gold-500 hover:text-gold-600 font-semibold">
+            S'inscrire
           </a>
-        </div>
+        </p>
+      </div>
+
+      <!-- Back to Home -->
+      <div class="mt-4 text-center">
+        <a routerLink="/portail" class="text-gray-500 hover:text-gray-700 text-sm">
+          ← Retour à l'accueil
+        </a>
       </div>
     </div>
   </div>
+</div>
