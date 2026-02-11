@@ -1,0 +1,55 @@
+/* Ajoutez ces styles à votre fichier CSS ou Tailwind config */
+
+/* Animation pour le menu mobile */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Classes utilitaires pour les boutons */
+.btn-gold {
+  @apply px-6 py-2 bg-gradient-to-r from-gold-500 to-gold-600 text-white rounded-lg font-semibold hover:from-gold-600 hover:to-gold-700 transition-all shadow-md hover:shadow-lg;
+}
+
+.btn-gold-outline {
+  @apply px-6 py-2 border-2 border-gold-500 text-gold-600 rounded-lg font-semibold hover:bg-gold-500 hover:text-white transition-all;
+}
+
+/* Animation pour le hamburger menu */
+.transition-all {
+  transition: all 0.3s ease;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 768px) {
+  /* Le menu hamburger sera visible */
+  .md\:hidden {
+    display: flex;
+  }
+  
+  /* Les éléments desktop seront cachés */
+  .hidden.md\:flex {
+    display: none;
+  }
+}
+
+/* Couleurs personnalisées Gold */
+:root {
+  --gold-50: #fffbeb;
+  --gold-100: #fef3c7;
+  --gold-200: #fde68a;
+  --gold-300: #fcd34d;
+  --gold-400: #fbbf24;
+  --gold-500: #f59e0b;
+  --gold-600: #d97706;
+}

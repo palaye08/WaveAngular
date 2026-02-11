@@ -22,6 +22,11 @@ export class ListReservationsComponent implements OnInit {
   loading = false;
   isAdmin = false;
 
+  // Pagination
+  currentPage = 1;
+  itemsPerPage = 3;
+  totalPages = 0;
+
   // Modals
   showConfirmModal = false;
   showCancelModal = false;
@@ -31,6 +36,7 @@ export class ListReservationsComponent implements OnInit {
   modalMessage = '';
   selectedReservationId?: number;
   actionType: 'confirm' | 'cancel' | '' = '';
+Math: any;
 
   ngOnInit() {
     this.isAdmin = this.authService.isAdmin();
@@ -44,6 +50,7 @@ export class ListReservationsComponent implements OnInit {
       this.reservationService.getReservations().subscribe({
         next: (reservations) => {
           this.reservations = reservations;
+          this.calculateTotalPages();
           this.loading = false;
         },
         error: () => this.loading = false
@@ -54,12 +61,79 @@ export class ListReservationsComponent implements OnInit {
         this.reservationService.getReservationsByUtilisateur(userId).subscribe({
           next: (reservations) => {
             this.reservations = reservations;
+            this.calculateTotalPages();
             this.loading = false;
           },
           error: () => this.loading = false
         });
       }
     }
+  }
+
+  get paginatedReservations(): Reservation[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return this.reservations.slice(startIndex, endIndex);
+  }
+
+  calculateTotalPages() {
+    this.totalPages = Math.ceil(this.reservations.length / this.itemsPerPage);
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  get pageNumbers(): number[] {
+    const pages: number[] = [];
+    const maxPagesToShow = 5;
+    
+    if (this.totalPages <= maxPagesToShow) {
+      for (let i = 1; i <= this.totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (this.currentPage <= 3) {
+        for (let i = 1; i <= 4; i++) {
+          pages.push(i);
+        }
+        pages.push(-1); // ellipsis
+        pages.push(this.totalPages);
+      } else if (this.currentPage >= this.totalPages - 2) {
+        pages.push(1);
+        pages.push(-1); // ellipsis
+        for (let i = this.totalPages - 3; i <= this.totalPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        pages.push(1);
+        pages.push(-1); // ellipsis
+        pages.push(this.currentPage - 1);
+        pages.push(this.currentPage);
+        pages.push(this.currentPage + 1);
+        pages.push(-1); // ellipsis
+        pages.push(this.totalPages);
+      }
+    }
+    
+    return pages;
   }
 
   openConfirmModal(id: number) {
@@ -132,15 +206,6 @@ export class ListReservationsComponent implements OnInit {
         this.closeCancelModal();
         this.modalMessage = err.error?.message || 'Erreur lors de l\'annulation';
         this.showErrorModal = true;
-      }
-    });
-  }
-
-   telechargerBillet(id: number) {
-    this.reservationService.getBillet(id).subscribe({
-      next: (billet) => {
-        // La logique de téléchargement sera implémentée ailleurs
-        console.log('Billet:', billet);
       }
     });
   }

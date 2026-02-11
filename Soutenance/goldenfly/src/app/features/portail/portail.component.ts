@@ -20,6 +20,9 @@ import { trigger, transition, style, animate } from '@angular/animations';
 export class PortailComponent implements OnInit {
   router = inject(Router);
 
+  // Propriété pour gérer l'état du menu mobile
+  isMenuOpen = false;
+
   features = [
     {
       icon: 'plane',
@@ -100,6 +103,11 @@ export class PortailComponent implements OnInit {
 
   navigateToLogin() {
     this.router.navigate(['/login']);
+  }
+
+  // Méthode pour basculer l'état du menu mobile
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
   }
 
   // Helper pour récupérer l'icône SVG
