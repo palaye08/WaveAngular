@@ -36,7 +36,9 @@ export class ListReservationsComponent implements OnInit {
   modalMessage = '';
   selectedReservationId?: number;
   actionType: 'confirm' | 'cancel' | '' = '';
-Math: any;
+
+// Exposer Math pour le template
+Math = Math;  // ✅ Correct
 
   ngOnInit() {
     this.isAdmin = this.authService.isAdmin();
